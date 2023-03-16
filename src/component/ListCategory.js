@@ -9,7 +9,7 @@ const CATEGOTIES = [
     { id: '4', name: 'Meats', image: require('../asset/meats.png') },
 
 ]
-const ListCategory = () => {
+const ListCategory = ({onChange, currentType}) => {
     return (
         <ScrollView
             horizontal
@@ -18,11 +18,13 @@ const ListCategory = () => {
             {CATEGOTIES.map((item, index) => {
                 return (
                     <TouchableOpacity
-                        // onPress={() => onChange(item.name)}
+                        onPress={() => onChange(item.name)}
                         key={item.id} 
-                        style={[styles.item]}>
+                        style={[styles.item,
+                            currentType == item.name && {backgroundColor: '#16C07B'}]}>
                         <Image source={item.image} resizeMode='contain' />
-                        <Text style={[styles.name]}>{item.name}</Text>
+                        <Text style={[styles.name,
+                          currentType == item.name && {color: 'white'}]}>{item.name}</Text>
                     </TouchableOpacity>
                 )
             })}

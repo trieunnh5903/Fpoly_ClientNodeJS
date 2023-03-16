@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StatusBar, StyleSheet, ScrollView, Image } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AppHeader from './src/component/AppHeader'
 import colors from './src/config/colors'
@@ -8,13 +8,13 @@ import ListBestSeller from './src/component/ListBestSeller'
 import { useProduct } from './src/hooks/useProduct'
 
 const App = () => {
-  const [products, fetchProducts] = useProduct();
-  // const [type, setType] = useState("Vegetable");
-  // useEffect(() => {
-  //   fetchProducts(type);
-  //   console.log('sdhahdk')
-  //   console.log(products)
-  // }, [type, fetchProducts])
+  const [products, isLoading, fetchProducts] = useProduct();
+  const [type, setType] = useState("Vegetable");
+  useEffect(() => {
+    fetchProducts(type);
+    console.log('sdhahdk')
+    console.log(products)
+  }, [type])
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />
@@ -25,8 +25,14 @@ const App = () => {
           <Text style={styles.searchText}>Seach buy item name</Text>
         </View>
         <Carousel />
-        <ListCategory/>
-        <ListBestSeller products={products} />
+        <ListCategory onChange={setType} currentType={type} />
+        {
+          isLoading ? (
+            <ActivityIndicator style={styles.isLoading} />
+          ) : (
+            <ListBestSeller products={products} />
+          )
+        }
       </ScrollView>
     </SafeAreaView>
   )
@@ -54,5 +60,8 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     padding: 14
+  },
+  isLoading: {
+    margin: 18
   }
 })
