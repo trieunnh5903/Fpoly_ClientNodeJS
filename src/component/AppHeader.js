@@ -1,29 +1,56 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import colors from '../config/colors'
+import { useNavigation } from '@react-navigation/native'
+import { useAppContext } from '../App';
 
 const AppHeader = () => {
-  return (
-    <View>
-        <View style={styles.container}>
-            <Image source={require('../asset/avatar.png')} style={styles.avatar}/>
-            <View style={styles.groupText}>
-                <Text style={styles.nameDisplay}>
-                    <Text style={styles.bold}>Hi</Text>, <Text>Casey</Text>
-                </Text>
-                <Text style={styles.desc}>What would you buy today?</Text>
+    const navigation = useNavigation();
+    const { products } = useAppContext();
+    return (
+        <View>
+            <View style={styles.container}>
+                <Image source={require('../asset/avatar.png')} style={styles.avatar} />
+                <View style={styles.groupText}>
+                    <Text style={styles.nameDisplay}>
+                        <Text style={styles.bold}>Hi</Text>, <Text>Casey</Text>
+                    </Text>
+                    <Text style={styles.desc}>What would you buy today?</Text>
+                </View>
+                <TouchableOpacity onPress={() => navigation.navigate("Order")}>
+                    <Image source={require('../asset/ic-checkout.png')}></Image>
+                    {products.length > 0 &&
+                        <View style={styles.badge}>
+                            <Text style={styles.badgeText}>{products.length}</Text>
+                        </View>
+                    }
+
+                </TouchableOpacity>
+
             </View>
-            <TouchableOpacity>
-                <Image source={require('../asset/ic-checkout.png')}></Image>
-            </TouchableOpacity>
         </View>
-    </View>
-  )
+    )
 }
 
 export default AppHeader
 
 const styles = StyleSheet.create({
+    badge: {
+        alignItems: 'center',
+        position: 'absolute',
+        backgroundColor: 'red',
+        width: 20,
+        borderRadius: 20,
+        right: -5,
+        top: -5,
+        aspectRatio: 1
+
+    },
+    badgeText: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        fontWeight: 'bold'
+    },
+
     nameDisplay: {
         fontSize: 16,
     },
@@ -48,5 +75,5 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50
     }
-    
+
 })

@@ -1,45 +1,48 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { useAppContext } from '../App'
 
-const ListProductOrder = () => {
-    const renderItem = ({item}) => {
-        return(
+const ListProductOrder = ({ products = [] }) => {
+    const { addProductToCart, removeProductFromCart } = useAppContext();
+
+    const renderItem = ({ item }) => {
+        return (
             <View style={styles.container}>
-            <Image
-                style={styles.img}
-                resizeMode='contain'
-                source={require('../asset/fresh-broccoli-vegetable.png')} />
-            <View style={styles.itemBody}>
-                <View style={styles.textHeader}>
-                    <Text style={styles.name}>Fresh Broccoli Vegetable</Text>
-                    <Text style={styles.category}>Vegetable</Text>
-                </View>
-                <View style={styles.footer}>
-                    <Text style={styles.priceView}>
-                        <Text style={styles.price}>$5.66</Text>
-                        <Text> /kg </Text>
-                    </Text>
-                    <View style={styles.groupAction}>
-                        <TouchableOpacity>
-                            <Image source={require('../asset/ic-remove.png')} />
-                        </TouchableOpacity>
-                        <Text style={styles.quantity}>2</Text>
-                        <TouchableOpacity>
-                            <Image source={require('../asset/ic-add.png')} />
-                        </TouchableOpacity>
+                <Image
+                    style={styles.img}
+                    resizeMode='contain'
+                    source={item.image} />
+                <View style={styles.itemBody}>
+                    <View style={styles.textHeader}>
+                        <Text style={styles.name}>{item.name}</Text>
+                        <Text style={styles.category}>{item.type}</Text>
+                    </View>
+                    <View style={styles.footer}>
+                        <Text style={styles.priceView}>
+                            <Text style={styles.price}>{item.pricePerKg}</Text>
+                            <Text> /kg </Text>
+                        </Text>
+                        <View style={styles.groupAction}>
+                            <TouchableOpacity onPress={() => removeProductFromCart(item)}>
+                                <Image source={require('../asset/ic-remove.png')} />
+                            </TouchableOpacity>
+                            <Text style={styles.quantity}>{item.quantity || 1}</Text>
+                            <TouchableOpacity onPress={() => addProductToCart(item)}>
+                                <Image source={require('../asset/ic-add.png')} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
         )
     }
     return (
-        <FlatList 
+        <FlatList
             contentContainerStyle={styles.list}
-            scrollEnabled={false} 
+            scrollEnabled={false}
             ItemSeparatorComponent={() => <View style={styles.hr}></View>}
-            renderItem={renderItem} 
-            data={[1,2,3,4,5,6,7,8,9]}/>
+            renderItem={renderItem}
+            data={products} />
 
     )
 }
@@ -50,9 +53,10 @@ const styles = StyleSheet.create({
     list: {
         paddingVertical: 14
     },
-    
+
     container: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flex: 1
     },
 
     price: {
@@ -67,12 +71,14 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 16,
-        fontWeight: '500'
+        fontWeight: '500',
+        color: '#000000'
     },
 
     category: {
         fontSize: 9,
-        marginTop: 6
+        marginTop: 6,
+        color: '#000000'
     },
 
     itemBody: {
@@ -91,7 +97,8 @@ const styles = StyleSheet.create({
     },
     quantity: {
         fontSize: 13,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
+        color: '#000000'
     },
 
     footer: {
@@ -99,6 +106,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     img: {
-        height: 80
+        height: 80,
+        width: '40%'
     }
 })

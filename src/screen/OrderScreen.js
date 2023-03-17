@@ -2,13 +2,25 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image, ScrollVi
 import React from 'react'
 import colors from '../config/colors'
 import ListProductOrder from '../component/ListProductOrder'
+import { useNavigation } from '@react-navigation/native'
+import { useAppContext } from "../App";
 
+const sumPrice = (products) => {
+    return products.reduce((sum, item) => {
+        return (
+            sum + parseFloat(item.quantity) * parseFloat((item.pricePerKg).replace('$', ''))
+        );
+    }, 0);
+};
 const OrderScreen = () => {
+    const navigation = useNavigation();
+    const { products } = useAppContext();
+    const totalPrice = (sumPrice(products) + 2.44).toFixed(2);
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.flexView}>
                 <View style={styles.headerContainer}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Home")}>
                         <Image
                             style={styles.imageButton}
                             source={require('../asset/ic-back.png')} />
@@ -26,7 +38,7 @@ const OrderScreen = () => {
                     style={styles.scrollView}
                     showsVerticalScrollIndicator={false} >
                     <Text style={styles.title}>Your order</Text>
-                    <ListProductOrder />
+                    <ListProductOrder products={products} />
                 </ScrollView>
                 <View style={styles.line1} />
                 <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
@@ -37,7 +49,7 @@ const OrderScreen = () => {
                     <View style={styles.line} />
                     <View style={styles.row}>
                         <Text style={styles.text2}>TOTAL</Text>
-                        <Text style={styles.text2}>$2.44</Text>
+                        <Text style={styles.text2}>${totalPrice}</Text>
                     </View>
                     <TouchableOpacity style={styles.btnCheckOut}>
                         <Text style={styles.txtCheckOut}>Checkout</Text>
