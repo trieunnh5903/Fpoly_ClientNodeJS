@@ -11,18 +11,14 @@ import { useCategory } from '../hooks/useCategory'
 const HomeScreen = () => {
     const [products, isLoading, fetchProducts] = useProduct();
     const categoryList = useCategory();
-    // console.log('categoryList: ' + categoryList);
     const [type, setType] = useState("Vegetable");
     useEffect(() => {
-        fetchProducts(type);
-        // console.log('sdhahdk')
-        // console.log(products)
+        fetchProducts(type);   
     }, [type])
-    //console.log("products: " + products);
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />
-            <ScrollView style={styles.scrollView}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
                 <AppHeader />
                 <View style={styles.searchContainer}>
                     <Image source={require('../asset/ic-search.png')} />
