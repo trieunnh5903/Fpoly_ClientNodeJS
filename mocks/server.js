@@ -58,5 +58,15 @@ window.server = createServer({
       ]
       return listProducts.filter(item => item.type == req.queryParams.type);
     })
+
+    this.get("/api/category", (schema, req) => {
+      const CATEGOTIES = [
+        { id: '1', name: 'Vegetable', image: require('../src/asset/vegetable.png') },
+        { id: '2', name: 'Fruit', image: require('../src/asset/fruit.png') },
+        { id: '3', name: 'Dairy', image: require('../src/asset/dairy.png') },
+        { id: '4', name: 'Meats', image: require('../src/asset/meats.png') },
+      ]
+      return CATEGOTIES;
+    })
   },
 })

@@ -1,31 +1,38 @@
 import { View, Text, SafeAreaView, StatusBar, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import AppHeader from './src/component/AppHeader'
-import colors from './src/config/colors'
-import Carousel from './src/component/Crousel'
-import ListCategory from './src/component/ListCategory'
-import ListBestSeller from './src/component/ListBestSeller'
-import { useProduct } from './src/hooks/useProduct'
+import AppHeader from './component/AppHeader'
+import colors from './config/colors'
+import Carousel from './component/Crousel'
+import ListCategory from './component/ListCategory'
+import ListBestSeller from './component/ListBestSeller'
+import { useProduct } from './hooks/useProduct'
+import { useCategory } from './hooks/useCategory'
 
 const App = () => {
   const [products, isLoading, fetchProducts] = useProduct();
+  const categoryList = useCategory();
+  // console.log('categoryList: ' + categoryList);
   const [type, setType] = useState("Vegetable");
   useEffect(() => {
     fetchProducts(type);
-    console.log('sdhahdk')
-    console.log(products)
+    // console.log('sdhahdk')
+    // console.log(products)
   }, [type])
+  //console.log("products: " + products);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />
       <ScrollView style={styles.scrollView}>
         <AppHeader />
         <View style={styles.searchContainer}>
-          <Image source={require('./src/asset/ic-search.png')} />
+          <Image source={require('./asset/ic-search.png')} />
           <Text style={styles.searchText}>Seach buy item name</Text>
         </View>
         <Carousel />
-        <ListCategory onChange={setType} currentType={type} />
+        {
+          categoryList.length > 0 &&
+          (<ListCategory categories={categoryList} onChange={setType} currentType={type} />)
+        }
         {
           isLoading ? (
             <ActivityIndicator style={styles.isLoading} />

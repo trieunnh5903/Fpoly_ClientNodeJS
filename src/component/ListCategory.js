@@ -9,13 +9,13 @@ const CATEGOTIES = [
     { id: '4', name: 'Meats', image: require('../asset/meats.png') },
 
 ]
-const ListCategory = ({onChange, currentType}) => {
+const ListCategory = ({onChange, currentType, categories}) => {
     return (
         <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             >
-            {CATEGOTIES.map((item, index) => {
+            {categories.map((item, index) => {
                 return (
                     <TouchableOpacity
                         onPress={() => onChange(item.name)}
