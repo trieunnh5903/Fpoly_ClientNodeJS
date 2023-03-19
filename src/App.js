@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screen/HomeScreen';
 import OrderScreen from './screen/OrderScreen';
+import LoginScreen from './screen/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 const AppContext = React.createContext(null);
@@ -56,6 +57,7 @@ function App() {
     <AppContext.Provider value={contextValue}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Order" component={OrderScreen} />
         </Stack.Navigator>
