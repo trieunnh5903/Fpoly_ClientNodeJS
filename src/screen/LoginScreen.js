@@ -2,40 +2,35 @@ import { Pressable, SafeAreaView, StyleSheet, StatusBar, Text, TextInput, View, 
 import React, { useState, useContext } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import AxiosIntance from './AxiosIntance';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
-// import StatusBarCustom from './component/StatusBarCustom';
-// import { AppContext } from '../config/AppContext';
+
 const LoginScreen = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState("")
-    const [userPassword, setUserPassword] = useState("")
+    const [userEmail, setUserEmail] = useState("abc@gmail.com")
+    const [userPassword, setUserPassword] = useState("abc")
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    // const {setInfoUser} = useContext(AppContext)
-    const goToMain = async () => {
-        // console.log(userEmail)
-        // console.log(userPassword)
-        // setIsLoading(true)
-        navigation.navigate('Home')
-        // try {
-        //     const response = await AxiosIntance().post("auth/login", { email: userEmail, password: userPassword })
-        //     if (!response.error) {
-        //         console.log(response.data)
-        //         await AsyncStorage.setItem("token", response.data.token)
-        //         // setInfoUser(response.data.user)
-        //         navigation.navigate('BottomTab', {screen:  'Home'})
-        //     } else {
-        //         ToastAndroid.show("Đăng nhập thất bại", ToastAndroid.SHORT)
 
-        //     }
-        // } catch (error) {
-        //     console.log(error.response)
-        // }
+    const getMovies = async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+            const json = await response.json();
+            console.log(json.userId)
+        } catch (error) {
+            console.error(error);
+        } finally {
+        }
+    };
 
+    React.useEffect(() => {
+        getMovies();
+    }, []);
 
+    const loginHandler = async () => {
+        navigation.navigate("Home")
     }
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />
@@ -79,7 +74,7 @@ const LoginScreen = ({ navigation }) => {
                 </View>
 
                 <View style={styles.mb_10}>
-                    <Pressable style={styles.btnLogin} onPress={goToMain}>
+                    <Pressable style={styles.btnLogin} onPress={loginHandler}>
                         <Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>
 
                         {/* {isLoading == false ?
@@ -95,7 +90,7 @@ const LoginScreen = ({ navigation }) => {
 
                 <View style={[styles.centerContentRow, styles.mb_7]}>
                     <FontAwesome.Button
-                        
+
                         style={styles.btnLoginFB}
                         iconStyle={{ color: "#1877F2" }}
                         name={'facebook'} >
@@ -103,7 +98,7 @@ const LoginScreen = ({ navigation }) => {
                     </FontAwesome.Button>
 
                     <Pressable style={[styles.btnLoginGG, styles.bg_white]}>
-                    <Icon style={{paddingHorizontal: 5}} name="google" size={20} color="#900" />
+                        <Icon style={{ paddingHorizontal: 5 }} name="google" size={20} color="#900" />
                         {/* <Image style={{ marginEnd: 5 }} source={require('./asset/Icon-google.png')}></Image> */}
                         <Text style={{ fontWeight: 'bold' }}>Google</Text>
                     </Pressable>
