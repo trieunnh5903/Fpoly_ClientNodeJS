@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, StyleSheet, StatusBar, Text, TextInput, View, Image, ActivityIndicator } from 'react-native'
+import { Pressable, SafeAreaView, KeyboardAvoidingView, StyleSheet, StatusBar, Text, TextInput, View, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useState, useContext } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
 import axios from 'axios';
+import IP from '../config/ip';
 const LoginScreen = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
@@ -14,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
 
     const loginHandler = async () => {
         try {
-            axios.post('http://192.168.1.6:3000/api/user/login', {
+            axios.post(`http://${IP}:3000/api/user/login`, {
                 email: userEmail,
                 password: userPassword
             })
@@ -45,82 +46,84 @@ const LoginScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                <View style={styles.content}>
+                    <View >
+                        <Text style={[styles.textTitle, styles.mb_6]}>Hello</Text>
+                        <Text style={[styles.textTitle, styles.colorBlue, styles.mb_6]}>Again!</Text>
+                        <Text style={[styles.colorGray, styles.textMessage, styles.mb_30]} >Welcome back you’ve {'\n'}been missed</Text>
 
-            <View style={styles.content}>
-                <View >
-                    <Text style={[styles.textTitle, styles.mb_6]}>Hello</Text>
-                    <Text style={[styles.textTitle, styles.colorBlue, styles.mb_6]}>Again!</Text>
-                    <Text style={[styles.colorGray, styles.textMessage, styles.mb_30]} >Welcome back you’ve {'\n'}been missed</Text>
-
-                </View>
-
-                <View>
-                    <Text style={[styles.size_11, styles.colorGray]}>Username<Text style={{ color: '#FF84B7' }}>*</Text></Text>
-                    <TextInput
-                        cursorColor={"#3A3B3C"}
-                        onChangeText={(newString) => setUserEmail(newString)}
-                        style={[styles.textInput, styles.mb_10]}></TextInput>
-                </View>
-
-                <View>
-                    <Text style={[styles.size_11, styles.colorGray]}>Password<Text style={{ color: '#FF84B7' }}>*</Text></Text>
-                    <TextInput
-                        cursorColor={"#3A3B3C"}
-                        onChangeText={(newString) => setUserPassword(newString)}
-                        style={styles.textInput}></TextInput>
-                </View>
-
-                <View style={[styles.textForgotPassword, styles.mb_7]}>
-                    <View style={styles.textRemenberMe}>
-                        <CheckBox
-                            disabled={false}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                            tintColor={{ true: '#66FF99', false: '#66FF99' }}
-                            style={[styles.ml__7]}
-                        />
-                        <Text style={[styles.colorGray, styles.size_11]}>Remember me</Text>
                     </View>
-                    <Text style={[styles.size_11, styles.colorBlueDark]}>Forgot the password ?</Text>
-                </View>
 
-                <View style={styles.mb_10}>
-                    <Pressable style={styles.btnLogin} onPress={loginHandler}>
-                        <Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>
+                    <View>
+                        <Text style={[styles.size_11, styles.colorGray]}>Username<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <TextInput
+                            cursorColor={"#3A3B3C"}
+                            onChangeText={(newString) => setUserEmail(newString)}
+                            style={[styles.textInput, styles.mb_10]}></TextInput>
+                    </View>
 
-                        {/* {isLoading == false ?
+                    <View>
+                        <Text style={[styles.size_11, styles.colorGray]}>Password<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <TextInput
+                            cursorColor={"#3A3B3C"}
+                            onChangeText={(newString) => setUserPassword(newString)}
+                            style={styles.textInput}></TextInput>
+                    </View>
+
+                    <View style={[styles.textForgotPassword, styles.mb_7]}>
+                        <View style={styles.textRemenberMe}>
+                            <CheckBox
+                                disabled={false}
+                                value={toggleCheckBox}
+                                onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                                tintColor={{ true: '#66FF99', false: '#66FF99' }}
+                                style={[styles.ml__7]}
+                            />
+                            <Text style={[styles.colorGray, styles.size_11]}>Remember me</Text>
+                        </View>
+                        <Text style={[styles.size_11, styles.colorBlueDark]}>Forgot the password ?</Text>
+                    </View>
+
+                    <View style={styles.mb_10}>
+                        <TouchableOpacity style={styles.btnLogin} onPress={loginHandler}>
+                            <Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>
+
+                            {/* {isLoading == false ?
                             // <ActivityIndicator size={"small"} color={"#3A3B3C"} />
                         } */}
 
-                    </Pressable>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.mb_10}>
+                        <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>or continue with</Text>
+                    </View>
+
+                    <View style={[styles.centerContentRow, styles.mb_7]}>
+                        <FontAwesome.Button
+
+                            style={styles.btnLoginFB}
+                            iconStyle={{ color: "#1877F2" }}
+                            name={'facebook'} >
+                            <Text style={{ fontWeight: 'bold' }}>Facebook</Text>
+                        </FontAwesome.Button>
+
+                        <Pressable style={[styles.btnLoginGG, styles.bg_white]}>
+                            <Icon style={{ paddingHorizontal: 5 }} name="google" size={20} color="#900" />
+                            {/* <Image style={{ marginEnd: 5 }} source={require('./asset/Icon-google.png')}></Image> */}
+                            <Text style={{ fontWeight: 'bold' }}>Google</Text>
+                        </Pressable>
+                    </View>
+
+                    <View>
+                        <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>
+                            don’t have an account ? <Text onPress={() => navigation.navigate('Register')} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
+                        </Text>
+                    </View>
                 </View>
+            </KeyboardAvoidingView>
 
-                <View style={styles.mb_10}>
-                    <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>or continue with</Text>
-                </View>
-
-                <View style={[styles.centerContentRow, styles.mb_7]}>
-                    <FontAwesome.Button
-
-                        style={styles.btnLoginFB}
-                        iconStyle={{ color: "#1877F2" }}
-                        name={'facebook'} >
-                        <Text style={{ fontWeight: 'bold' }}>Facebook</Text>
-                    </FontAwesome.Button>
-
-                    <Pressable style={[styles.btnLoginGG, styles.bg_white]}>
-                        <Icon style={{ paddingHorizontal: 5 }} name="google" size={20} color="#900" />
-                        {/* <Image style={{ marginEnd: 5 }} source={require('./asset/Icon-google.png')}></Image> */}
-                        <Text style={{ fontWeight: 'bold' }}>Google</Text>
-                    </Pressable>
-                </View>
-
-                <View>
-                    <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>
-                        don’t have an account ? <Text onPress={() => navigation.navigate('Register')} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
-                    </Text>
-                </View>
-            </View>
         </SafeAreaView>
     )
 }
