@@ -5,31 +5,42 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
-
+import axios from 'axios';
 const LoginScreen = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState("abc@gmail.com")
-    const [userPassword, setUserPassword] = useState("abc")
+    const [userEmail, setUserEmail] = useState("")
+    const [userPassword, setUserPassword] = useState("")
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const getMovies = async () => {
+    const loginHandler = async () => {
         try {
-            const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-            const json = await response.json();
-            console.log(json.userId)
+            axios.post('http://192.168.1.6:3000/api/user/login', {
+                email: userEmail,
+                password: userPassword
+            })
+                .then(function (response) {
+                    // xử trí khi thành công
+                    console.log(response.data);
+                    if (response.data.error == false) {
+                        navigation.navigate("Home")
+                    }
+                })
+                .catch(function (error) {
+                    // xử trí khi bị lỗi
+                    console.log("errpr " + error);
+                })
+                .finally(function () {
+                    // luôn luôn được thực thi
+                });
         } catch (error) {
             console.error(error);
         } finally {
         }
     };
 
-    React.useEffect(() => {
-        getMovies();
-    }, []);
-
-    const loginHandler = async () => {
-        navigation.navigate("Home")
-    }
+    // const loginHandler = async () => {
+    //     navigation.navigate("Home")
+    // }
 
     return (
         <SafeAreaView style={styles.container}>
