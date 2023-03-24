@@ -16,7 +16,7 @@ const AppHeader = () => {
                     </Text>
                     <Text style={styles.desc}>What would you buy today?</Text>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate("Order")}>
+                <TouchableOpacity onPress={() => navigation.navigate("BottomTab", {screen : 'Cart'})}>
                     <Image source={require('../asset/ic-checkout.png')}></Image>
                     {products.length > 0 &&
                         <View style={styles.badge}>

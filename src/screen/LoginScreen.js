@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, KeyboardAvoidingView, StyleSheet, StatusBar, Text, TextInput, View, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { Pressable, SafeAreaView, KeyboardAvoidingView, StyleSheet, StatusBar, Text, TextInput, View, Image, ActivityIndicator, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useState, useContext } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -7,41 +7,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
 import axios from 'axios';
 import IP from '../config/ip';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+const window = Dimensions.get('window');
 const LoginScreen = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+    // const loginHandler = async () => {
+    //     setIsLoading(true);
+    //     axios.post(`http://${IP}:3000/api/user/login`, {
+    //         email: userEmail,
+    //         password: userPassword
+    //     })
+    //         .then(function (response) {
+    //             // xử trí khi thành công
+    //             console.log(response.data);
+    //             if (response.data.error == false) {
+    //                 navigation.navigate("Home")
+    //             }
+    //         })
+    //         .catch(function (error) {
+    //             // xử trí khi bị lỗi
+    //             console.log("loginHandler:  " + error);
+    //         })
+    //         .finally(function () {
+    //             // luôn luôn được thực thi
+    //             setIsLoading(false)
+    //         });
+    // };
 
     const loginHandler = async () => {
-        try {
-            axios.post(`http://${IP}:3000/api/user/login`, {
-                email: userEmail,
-                password: userPassword
-            })
-                .then(function (response) {
-                    // xử trí khi thành công
-                    console.log(response.data);
-                    if (response.data.error == false) {
-                        navigation.navigate("Home")
-                    }
-                })
-                .catch(function (error) {
-                    // xử trí khi bị lỗi
-                    console.log("errpr " + error);
-                })
-                .finally(function () {
-                    // luôn luôn được thực thi
-                });
-        } catch (error) {
-            console.error(error);
-        } finally {
-        }
-    };
-
-    // const loginHandler = async () => {
-    //     navigation.navigate("Home")
-    // }
+        navigation.navigate('BottomTab', { screen: 'Home' })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -56,7 +55,7 @@ const LoginScreen = ({ navigation }) => {
                     </View>
 
                     <View>
-                        <Text style={[styles.size_11, styles.colorGray]}>Username<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <Text style={[styles.size_11, styles.colorGray]}>Phone Number<Text style={{ color: '#FF84B7' }}>*</Text></Text>
                         <TextInput
                             cursorColor={"#3A3B3C"}
                             onChangeText={(newString) => setUserEmail(newString)}
@@ -65,10 +64,17 @@ const LoginScreen = ({ navigation }) => {
 
                     <View>
                         <Text style={[styles.size_11, styles.colorGray]}>Password<Text style={{ color: '#FF84B7' }}>*</Text></Text>
-                        <TextInput
-                            cursorColor={"#3A3B3C"}
-                            onChangeText={(newString) => setUserPassword(newString)}
-                            style={styles.textInput}></TextInput>
+                        <View style={styles.password}>
+                            <TextInput
+                                secureTextEntry={isPasswordSecure}
+                                cursorColor={"#3A3B3C"}
+                                onChangeText={(newString) => setUserPassword(newString)}
+                                style={[styles.textInput, { flex: 1 }]}></TextInput>
+                            <Pressable style={{ padding: 10 }} onPress={() => setIsPasswordSecure(!isPasswordSecure)}>
+                                <MaterialCommunityIcons name={isPasswordSecure ? "eye-off" : "eye"} size={24} color="#B0B3B8" />
+                            </Pressable>
+                        </View>
+
                     </View>
 
                     <View style={[styles.textForgotPassword, styles.mb_7]}>
@@ -77,7 +83,7 @@ const LoginScreen = ({ navigation }) => {
                                 disabled={false}
                                 value={toggleCheckBox}
                                 onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                                tintColor={{ true: '#66FF99', false: '#66FF99' }}
+                                tintColor={{ true: '#16C07B', false: '#16C07B' }}
                                 style={[styles.ml__7]}
                             />
                             <Text style={[styles.colorGray, styles.size_11]}>Remember me</Text>
@@ -86,14 +92,15 @@ const LoginScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.mb_10}>
-                        <TouchableOpacity style={styles.btnLogin} onPress={loginHandler}>
-                            <Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>
+                        <Pressable style={styles.btnLogin} onPress={loginHandler}>
 
-                            {/* {isLoading == false ?
-                            // <ActivityIndicator size={"small"} color={"#3A3B3C"} />
-                        } */}
 
-                        </TouchableOpacity>
+                            {isLoading == false ? 
+                            (<Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>) :
+                                <ActivityIndicator size={"small"} color={colors.white_bg} />
+                            }
+
+                        </Pressable>
                     </View>
 
                     <View style={styles.mb_10}>
@@ -140,6 +147,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
         marginVertical: 20
     },
+    password: {
+        flexDirection: 'row', alignItems: 'center', width: '100%',
+        marginTop: 4,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 3,
+        color: '#3A3B3C'
+    },
     textTitle: {
         fontFamily: 'Poppins',
         fontSize: 34,
@@ -173,20 +187,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textBtnLogin: {
+        width: window.width * 0.3,
         textAlign: 'center',
         fontWeight: 'bold'
     },
     btnLoginGG: {
-        flexBasis: '45%',
+        width: window.width * 0.35,
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingVertical: 7,
         alignItems: 'center',
         borderRadius: 3,
         height: 40
     },
     btnLoginFB: {
-        backgroundColor: "#EEF1F4", paddingHorizontal: 25, height: 40
+        width: window.width * 0.35,
+        backgroundColor: "#EEF1F4", height: 40,
+        justifyContent: 'center'
     },
     centerContentRow: {
         flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'

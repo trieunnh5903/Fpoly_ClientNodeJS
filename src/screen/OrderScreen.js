@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image, ScrollView, Dimensions } from 'react-native'
 import React from 'react'
 import colors from '../config/colors'
 import ListProductOrder from '../component/ListProductOrder'
 import { useNavigation } from '@react-navigation/native'
 import { useAppContext } from "../App";
+
+const window = Dimensions.get('window')
 
 const sumPrice = (products) => {
     return products.reduce((sum, item) => {
@@ -52,7 +54,7 @@ const OrderScreen = () => {
                         <Text style={styles.text2}>${totalPrice}</Text>
                     </View>
                     <TouchableOpacity style={styles.btnCheckOut}>
-                        <Text style={styles.txtCheckOut}>Checkout</Text>
+                        <Text style={styles.txtCheckOut}>Check out</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -68,10 +70,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F8F8',
         width: '100%',
         marginBottom: 20
+
     },
     txtCheckOut: {
         fontSize: 15,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        fontWeight: '700'
     },
     btnCheckOut: {
         backgroundColor: '#26E698',
@@ -103,6 +107,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
+        
     },
     container: {
         flex: 1,

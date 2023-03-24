@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StatusBar, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, StyleSheet, ScrollView, Image, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AppHeader from '../component/AppHeader'
 import colors from '../config/colors'
@@ -8,6 +8,7 @@ import ListBestSeller from '../component/ListBestSeller'
 import { useProduct } from '../hooks/useProduct'
 import { useCategory } from '../hooks/useCategory'
 
+const window = Dimensions.get('window')
 const HomeScreen = () => {
     const [products, isLoading, fetchProducts] = useProduct();
     const categoryList = useCategory();
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.white_bg,
+        marginBottom: window.height * 0.09
     },
     searchText: {
         fontSize: 12,
