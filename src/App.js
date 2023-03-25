@@ -12,6 +12,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import colors from './config/colors';
 import AccountScreen from './screen/AccountScreen';
 import NotificationScreen from './screen/NotificationScreen';
+import SearchScreen from './screen/SearchScreen';
 
 
 const h = Dimensions.get('window').height
@@ -22,7 +23,7 @@ const AppContext = React.createContext(null);
 const StackNavigation = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Order' component={OrderScreen} />
+      <Stack.Screen name='Search' component={SearchScreen} />
     </Stack.Navigator>
   )
 }
