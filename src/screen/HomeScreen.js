@@ -15,9 +15,9 @@ const HomeScreen = () => {
     const [products, isLoading, fetchProducts] = useProduct();
     const categoryList = useCategory();
     const [type, setType] = useState("Vegetable");
-    // useEffect(() => {
-    //     fetchProducts(type);   
-    // }, [type])
+    useEffect(() => {
+        fetchProducts(type);   
+    }, [type])
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />

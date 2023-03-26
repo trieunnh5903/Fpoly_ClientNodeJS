@@ -7,7 +7,7 @@ const SearchBox = ({ value, onChangeText }) => {
         <View style={styles.container}>
             <Image style={styles.icon} source={require('../asset/ic-search.png')} />
             <TextInput
-                value={value}
+                // value={value}
                 onChangeText={onChangeText}
                 style={styles.input}
                 placeholder='Search your course'></TextInput>

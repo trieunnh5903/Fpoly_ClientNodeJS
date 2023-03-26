@@ -1,79 +1,76 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native'
 import React from 'react'
-import { useAppContext } from '../App'
+import colors from '../config/colors'
+import { useAppContext } from '../App';
+import SPACING from '../config/spacing';
 
-const ListProductSearch = ({ products = [] }) => {
-    const { addProductToCart, removeProductFromCart } = useAppContext();
-
-    const renderItem = ({ item }) => {
-        return (
-            <View style={styles.container}>
-                <Image
-                    style={styles.img}
-                    resizeMode='contain'
-                    source={item.image} />
-                <View style={styles.itemBody}>
-                    <View style={styles.textHeader}>
-                        <Text style={styles.name}>{item.name}</Text>
-                        <Text style={styles.category}>{item.type}</Text>
-                    </View>
-                    <View style={styles.footer}>
-                        <Text style={styles.priceView}>
-                            <Text style={styles.price}>{item.pricePerKg}</Text>
-                            <Text> /kg </Text>
-                        </Text>
-                        <View style={styles.groupAction}>
-                            <TouchableOpacity onPress={() => removeProductFromCart(item)}>
-                                <Image source={require('../asset/ic-remove.png')} />
-                            </TouchableOpacity>
-                            <Text style={styles.quantity}>{item.quantity || 1}</Text>
-                            <TouchableOpacity onPress={() => addProductToCart(item)}>
-                                <Image source={require('../asset/ic-add.png')} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        )
-    }
+const ProductItem = (props) => {
+    const window = useWindowDimensions();
+    const ITEM_SIZE = (window.width - 2 * SPACING - SPACING - 4 * 3) / 2;
+    const PADDING_INNER = 10;
+    const { addProductToCart } = useAppContext()
     return (
-        <View>
-            <View style={styles.foundContainer}>
-                <Text style={styles.textFound}>154+ Result Found</Text>
-                <Text style={styles.textFound}>Cancel</Text>
+        <View style={[{
+            width: ITEM_SIZE,
+            marginRight: props.index % 2 == 0 ? 14 : 0,
+            padding: PADDING_INNER,
+            borderRadius: 10,
+            margin: 3
+        },
+        styles.itemContainer]}>
+            <Image source={props.image}
+                resizeMode='contain'
+                style={{
+                    width: ITEM_SIZE - 2 * PADDING_INNER,
+                    height: (ITEM_SIZE - 2 * PADDING_INNER) * (107 / 144),
+                }} />
+            <Text style={styles.name}>{props.name}</Text>
+            <Text style={styles.type}>{props.type}</Text>
+            <View style={styles.bottom}>
+                <Text style={styles.priceView}>
+                    <Text style={styles.name}>{props.pricePerKg}</Text>
+                    <Text>/Kg</Text>
+                </Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        addProductToCart(props);
+                        ToastAndroid.show(`Add ${props.name} to cart success!`, ToastAndroid.SHORT);
+                    }} >
+                    <Image source={require('../asset/ic-add.png')} />
+                </TouchableOpacity>
             </View>
-
-            <FlatList
-                contentContainerStyle={styles.list}
-                scrollEnabled={false}
-                ItemSeparatorComponent={() => <View style={styles.hr}></View>}
-                renderItem={renderItem}
-                data={products} />
         </View>
-
+    )
+}
+const ListProductSearch = ({ products }) => {
+    const renderItem = ({ item, index }) => <ProductItem index={index} {...item} />
+    return (
+        <>
+            <FlatList
+                numColumns={2}
+                key={2}
+                scrollEnabled={false}
+                data={products}
+                contentContainerStyle={{ paddingBottom: 10 }}
+                ItemSeparatorComponent={() => <View style={{ marginTop: 14 - 6 }}></View>}
+                renderItem={renderItem} />
+        </>
     )
 }
 
 export default ListProductSearch
 
 const styles = StyleSheet.create({
-    list: {
-        paddingVertical: 14
+    name: {
+        fontSize: 12,
+        fontWeight: '600',
+        color: '#000000'
     },
-    foundContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+    type: {
+        fontSize: 12,
+        color: colors.gray,
+        marginVertical: 8
     },
-    
-    textFound: {
-        fontSize: 11,
-        color: '#1B1B1B',
-    },
-    container: {
-        flexDirection: 'row',
-        flex: 1
-    },
-
     price: {
         fontSize: 14,
         fontWeight: '600',
@@ -81,47 +78,21 @@ const styles = StyleSheet.create({
     },
     priceView: {
         fontSize: 12,
-        color: '#A1A1A1',
-        flex: 1
+        color: colors.gray
     },
-    name: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: '#000000'
-    },
-
-    category: {
-        fontSize: 9,
-        marginTop: 6,
-        color: '#000000'
-    },
-
-    itemBody: {
-        flex: 1,
-    },
-
-    textHeader: {
-        flex: 1
-    },
-
-    groupAction: {
-        flexDirection: 'row'
-    },
-    hr: {
-        height: 18
-    },
-    quantity: {
-        fontSize: 13,
-        paddingHorizontal: 8,
-        color: '#000000'
-    },
-
-    footer: {
+    bottom: {
         flexDirection: 'row',
-        alignItems: 'center'
+        justifyContent: 'space-between'
     },
-    img: {
-        height: 80,
-        width: '40%'
-    }
+    itemContainer: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+    },
+   
 })

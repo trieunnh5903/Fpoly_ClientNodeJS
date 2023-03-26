@@ -6,20 +6,18 @@ const CATEGOTIES = [
     { id: '4', name: 'Meats', image: require('../asset/meats.png') },
   ]
 export const useCategory = () => {
-    // const [categoryList, setCategoryList] = React.useState([]);
+    const [categoryList, setCategoryList] = React.useState([]);
 
-    // const fetchCategoryList = async () => {
-    //     // setIsLoading(true);
-    //     const res = await fetch(`/api/category`);
-    //     const data = await res.json();
-    //     setCategoryList(data || []);
-    //     // setIsLoading(false);
-    // };
+    const fetchCategoryList = async () => {
+        const res = await fetch(`/api/category`);
+        const data = await res.json();
+        setCategoryList(data || []);
+    };
 
-    // React.useEffect(() => {
-    //     fetchCategoryList()
-    // }, [])
+    React.useEffect(() => {
+        fetchCategoryList()
+    }, [])
 
 
-    return CATEGOTIES;
+    return categoryList;
 }
