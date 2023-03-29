@@ -53,6 +53,7 @@ const listProducts = [
     },
 ]
 
+
 window.server = createServer({
     routes() {
         //lay danh sach theo san pham theo loai
@@ -74,6 +75,14 @@ window.server = createServer({
                 { id: '4', name: 'Meats', image: require('../src/asset/meats.png') },
             ]
         })
+
+        this.post("/api/user/login", (schema, request) => {
+            let attrs = JSON.parse(request.requestBody)
+            // console.log(attrs)
+            return {
+                error: false, email: 'abc@gmail.com', password: 'abc'
+            }
+          })
     },
 })
 

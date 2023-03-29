@@ -15,32 +15,36 @@ const LoginScreen = ({ navigation }) => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isPasswordSecure, setIsPasswordSecure] = useState(true);
-    // const loginHandler = async () => {
-    //     setIsLoading(true);
-    //     axios.post(`http://${IP}:3000/api/user/login`, {
-    //         email: userEmail,
-    //         password: userPassword
-    //     })
-    //         .then(function (response) {
-    //             // xử trí khi thành công
-    //             console.log(response.data);
-    //             if (response.data.error == false) {
-    //                 navigation.navigate("Home")
-    //             }
-    //         })
-    //         .catch(function (error) {
-    //             // xử trí khi bị lỗi
-    //             console.log("loginHandler:  " + error);
-    //         })
-    //         .finally(function () {
-    //             // luôn luôn được thực thi
-    //             setIsLoading(false)
-    //         });
-    // };
-
     const loginHandler = async () => {
-        navigation.navigate('BottomTab', { screen: 'Home' })
-    }
+        setIsLoading(true);
+        // http://${IP}:3000/api/user/login
+        axios.post(`/api/user/login`, {
+            email: userEmail,
+            password: userPassword
+        })
+            .then(function (response) {
+                // xử trí khi thành công
+               // console.log(">>>>>>>>>>" + response.data.error);
+                if (response.data.error == false) {
+                    navigation.navigate('BottomTab', { screen: 'Home' })
+                } else {
+                  //  console.log("++++++++++++" + response.data.error);
+
+                }
+            })
+            .catch(function (error) {
+                // xử trí khi bị lỗi
+                console.log("loginHandler:  " + error);
+            })
+            .finally(function () {
+                // luôn luôn được thực thi
+                setIsLoading(false)
+            });
+    };
+
+    // const loginHandler = async () => {
+    //     navigation.navigate('BottomTab', { screen: 'Home' })
+    // }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -95,8 +99,8 @@ const LoginScreen = ({ navigation }) => {
                         <Pressable style={styles.btnLogin} onPress={loginHandler}>
 
 
-                            {isLoading == false ? 
-                            (<Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>) :
+                            {isLoading == false ?
+                                (<Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>) :
                                 <ActivityIndicator size={"small"} color={colors.white_bg} />
                             }
 
