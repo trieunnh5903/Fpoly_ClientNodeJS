@@ -80,7 +80,7 @@ window.server = createServer({
             let attrs = JSON.parse(request.requestBody)
             // console.log(attrs)
             return {
-                error: false, email: 'abc@gmail.com', password: 'abc'
+                error: false, email: 'abc@gmail.com', password: 'abc', name: 'Martin Garix'
             }
           })
     },

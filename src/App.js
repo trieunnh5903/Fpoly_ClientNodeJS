@@ -13,7 +13,8 @@ import colors from './config/colors';
 import AccountScreen from './screen/AccountScreen';
 import NotificationScreen from './screen/NotificationScreen';
 import SearchScreen from './screen/SearchScreen';
-
+import { Provider } from "react-redux";
+import store from './redux/store';
 
 const h = Dimensions.get('window').height
 const Stack = createNativeStackNavigator();
@@ -122,16 +123,22 @@ function App() {
     removeProductFromCart
   }
   return (
-    <AppContext.Provider value={contextValue}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Stack" component={StackNavigation} />
-          <Stack.Screen name="BottomTab" component={BottomTabsNavigation} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AppContext.Provider>
+    // <AppContext.Provider value={contextValue}>
+
+    // </AppContext.Provider>
     // <AccountScreen></AccountScreen>
+    <Provider store={store}>
+      <AppContext.Provider value={contextValue}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Stack" component={StackNavigation} />
+            <Stack.Screen name="BottomTab" component={BottomTabsNavigation} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppContext.Provider>
+
+    </Provider>
   );
 }
 

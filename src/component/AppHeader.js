@@ -2,17 +2,18 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useAppContext } from '../App';
-
+import { useSelector } from "react-redux";
 const AppHeader = () => {
     const navigation = useNavigation();
     const { products } = useAppContext();
+    const userName = useSelector(state => state.login.name);
     return (
         <View>
             <View style={styles.container}>
                 <Image source={require('../asset/avatar.png')} style={styles.avatar} />
                 <View style={styles.groupText}>
                     <Text style={styles.nameDisplay}>
-                        <Text style={styles.bold}>Hi</Text>, <Text>Casey</Text>
+                        <Text style={styles.bold}>Hi</Text>, <Text>{userName}</Text>
                     </Text>
                     <Text style={styles.desc}>What would you buy today?</Text>
                 </View>

@@ -8,6 +8,9 @@ import colors from '../config/colors';
 import axios from 'axios';
 import IP from '../config/ip';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch } from 'react-redux'
+import { setLoginState } from '../redux/reducer/loginSlice';
+
 const window = Dimensions.get('window');
 const LoginScreen = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState("")
@@ -15,6 +18,7 @@ const LoginScreen = ({ navigation }) => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+    const dispatch = useDispatch();
     const loginHandler = async () => {
         setIsLoading(true);
         // http://${IP}:3000/api/user/login
@@ -24,11 +28,14 @@ const LoginScreen = ({ navigation }) => {
         })
             .then(function (response) {
                 // xử trí khi thành công
-               // console.log(">>>>>>>>>>" + response.data.error);
+                // console.log(">>>>>>>>>>" + response.data.error);
                 if (response.data.error == false) {
+                    dispatch(
+                        setLoginState({ email: response.data.email, password: response.data.password, name: response.data.name })
+                    )
                     navigation.navigate('BottomTab', { screen: 'Home' })
                 } else {
-                  //  console.log("++++++++++++" + response.data.error);
+                    //  console.log("++++++++++++" + response.data.error);
 
                 }
             })
@@ -41,7 +48,6 @@ const LoginScreen = ({ navigation }) => {
                 setIsLoading(false)
             });
     };
-
     // const loginHandler = async () => {
     //     navigation.navigate('BottomTab', { screen: 'Home' })
     // }
