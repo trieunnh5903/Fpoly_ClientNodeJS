@@ -1,5 +1,5 @@
 import { Pressable, SafeAreaView, KeyboardAvoidingView, StyleSheet, StatusBar, Text, TextInput, View, Image, ActivityIndicator, TouchableOpacity, Dimensions } from 'react-native'
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,49 +8,29 @@ import colors from '../config/colors';
 import axios from 'axios';
 import IP from '../config/ip';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDispatch } from 'react-redux'
-import { setLoginState } from '../redux/reducer/loginSlice';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchLoginThunk, setLoginState } from '../redux/reducer/loginSlice';
+import { useNavigation } from '@react-navigation/native';
 
 const window = Dimensions.get('window');
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isPasswordSecure, setIsPasswordSecure] = useState(true);
     const dispatch = useDispatch();
-    const loginHandler = async () => {
-        setIsLoading(true);
-        // http://${IP}:3000/api/user/login
-        axios.post(`/api/user/login`, {
-            email: userEmail,
-            password: userPassword
-        })
-            .then(function (response) {
-                // xử trí khi thành công
-                // console.log(">>>>>>>>>>" + response.data.error);
-                if (response.data.error == false) {
-                    dispatch(
-                        setLoginState({ email: response.data.email, password: response.data.password, name: response.data.name })
-                    )
-                    navigation.navigate('BottomTab', { screen: 'Home' })
-                } else {
-                    //  console.log("++++++++++++" + response.data.error);
+    const navigation = useNavigation();
+    const { isLoggedIn } = useSelector((state) => state.login)
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigation.navigate('BottomTab', { screen: 'Home' });
+        }
+    }, [isLoggedIn])
 
-                }
-            })
-            .catch(function (error) {
-                // xử trí khi bị lỗi
-                console.log("loginHandler:  " + error);
-            })
-            .finally(function () {
-                // luôn luôn được thực thi
-                setIsLoading(false)
-            });
+    const loginHandler = () => {
+        dispatch(fetchLoginThunk({ email: userEmail, password: userPassword }));
     };
-    // const loginHandler = async () => {
-    //     navigation.navigate('BottomTab', { screen: 'Home' })
-    // }
 
     return (
         <SafeAreaView style={styles.container}>

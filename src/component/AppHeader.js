@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const AppHeader = () => {
     const navigation = useNavigation();
     const { products } = useAppContext();
-    const userName = useSelector(state => state.login.name);
+    const userName = useSelector(state => state.login.currentUser.name);
     return (
         <View>
             <View style={styles.container}>
