@@ -86,11 +86,11 @@ export const useAppContext = () => {
 function App() {
   const [products, setProducts] = React.useState([])
   const addProductToCart = (product) => {
-    const existedProduct = products.find(item => item.id == product.id);
+    const existedProduct = products.find(item => item._id == product._id);
     if (existedProduct) {
       setProducts(
         [
-          ...products.filter(item => item.id != product.id),
+          ...products.filter(item => item._id != product._id),
           { ...existedProduct, quantity: (existedProduct.quantity || 1) + 1 }
         ]
       )
@@ -100,17 +100,17 @@ function App() {
   }
 
   const removeProductFromCart = product => {
-    const existedProduct = products.find(item => item.id == product.id);
+    const existedProduct = products.find(item => item._id == product._id);
     if (existedProduct && existedProduct.quantity == 1) {
       return setProducts(
-        [...products.filter(item => item.id != product.id)]
+        [...products.filter(item => item._id != product._id)]
       )
     }
 
     if (existedProduct) {
       return setProducts(
         [
-          ...products.filter(item => item.id != product.id),
+          ...products.filter(item => item._id != product._id),
           { ...existedProduct, quantity: (existedProduct.quantity || 1) - 1 }
         ]
       )

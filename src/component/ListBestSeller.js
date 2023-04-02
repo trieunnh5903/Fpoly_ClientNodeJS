@@ -6,13 +6,12 @@ import { useAppContext } from '../App';
 const ProductItem = (props) => {
     const window = useWindowDimensions();
     const ITEM_SIZE = (window.width - 2 * 14 - 14 - 4 * 3) / 2;
-    const PADDING_INNER = 10;
     const { addProductToCart } = useAppContext()
     return (
         <View style={[{
             width: ITEM_SIZE,
             marginRight: props.index % 2 == 0 ? 14 : 0,
-            padding: PADDING_INNER,
+            padding: 10,
             borderRadius: 10,
             margin: 3
         },
@@ -20,8 +19,8 @@ const ProductItem = (props) => {
             <Image source={{uri: props.image}}
                 resizeMode='contain'
                 style={{
-                    width: ITEM_SIZE - 2 * PADDING_INNER,
-                    height: (ITEM_SIZE - 2 * PADDING_INNER) * (107 / 144),
+                    width: ITEM_SIZE - 2 * 10,
+                    height: (ITEM_SIZE - 2 * 10) * (107 / 144),
                 }} />
             <Text style={styles.name}>{props.name}</Text>
             {/* <Text style={styles.type}>{props.category}</Text> */}

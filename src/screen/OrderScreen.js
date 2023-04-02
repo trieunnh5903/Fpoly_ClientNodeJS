@@ -10,7 +10,7 @@ const window = Dimensions.get('window')
 const sumPrice = (products) => {
     return products.reduce((sum, item) => {
         return (
-            sum + parseFloat(item.quantity) * parseFloat((item.pricePerKg).replace('$', ''))
+            sum + parseFloat(item.quantity) * parseFloat((item.price))
         );
     }, 0);
 };

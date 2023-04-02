@@ -11,15 +11,15 @@ const ListProductOrder = ({ products = [] }) => {
                 <Image
                     style={styles.img}
                     resizeMode='contain'
-                    source={item.image} />
+                    source={{uri: item.image}} />
                 <View style={styles.itemBody}>
                     <View style={styles.textHeader}>
                         <Text style={styles.name}>{item.name}</Text>
-                        <Text style={styles.category}>{item.type}</Text>
+                       
                     </View>
                     <View style={styles.footer}>
                         <Text style={styles.priceView}>
-                            <Text style={styles.price}>{item.pricePerKg}</Text>
+                            <Text style={styles.price}>${item.price}</Text>
                             <Text> /kg </Text>
                         </Text>
                         <View style={styles.groupAction}>
