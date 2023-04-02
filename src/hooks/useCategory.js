@@ -7,7 +7,6 @@ export const useCategory = () => {
     const fetchCategoryList = async () => {
         const res = await fetch(`http://${IP}:3000/api/category`);
         const data = await res.json();
-        console.log(data);
         setCategoryList(data || []);
     };
 

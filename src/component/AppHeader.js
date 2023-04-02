@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useAppContext } from '../App';
@@ -7,11 +7,20 @@ const AppHeader = () => {
     const navigation = useNavigation();
     const { products } = useAppContext();
     // const userName = useSelector(state => state.login.currentUser.name);
-    const { user: { name } } = useSelector(state => state.login.currentUser);
+    const { user: { name, avatar } } = useSelector(state => state.login.currentUser);
     return (
         <View>
             <View style={styles.container}>
-                <Image source={require('../asset/avatar.png')} style={styles.avatar} />
+                <Pressable onPress={() => navigation.navigate("BottomTab", { screen: 'Account' })}>
+                    {
+                        avatar ? (
+                            <Image source={{ uri: avatar }} style={styles.avatar} />
+                        ) : (
+                            <Image source={require('../asset/avatar.png')} style={styles.avatar} />
+                        )
+                    }
+                </Pressable>
+
                 <View style={styles.groupText}>
                     <Text style={styles.nameDisplay}>
                         <Text style={styles.bold}>Hi</Text>, <Text>{name}</Text>
@@ -75,7 +84,8 @@ const styles = StyleSheet.create({
     },
     avatar: {
         width: 50,
-        height: 50
+        height: 50,
+        borderRadius: 100
     }
 
 })

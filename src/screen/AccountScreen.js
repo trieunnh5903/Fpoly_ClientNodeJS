@@ -5,10 +5,11 @@ import { launchImageLibrary } from 'react-native-image-picker'
 import colors from '../config/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useSelector  } from "react-redux";
 const window = Dimensions.get('window');
 const AccountScreen = () => {
-    const [infoUser, setInfoUser] = useState({ avatar: '' })
+    const { user: {name, avatar } } = useSelector(state => state.login.currentUser);
+    // const [infoUser, setInfoUser] = useState({ avatar: '' })
     const getImageLibrary = async () => {
         const result = await launchImageLibrary();
         // console.log(result.assets[0].uri)
@@ -20,7 +21,8 @@ const AccountScreen = () => {
                     type: 'image/jpeg',
                     name: 'image.jpg'
                 })
-            setInfoUser({ ...infoUser, avatar: result.assets[0].uri })
+            console.log("+++++++++++++++++" + result.assets[0].uri);
+            // setInfoUser({ ...infoUser, avatar: result.assets[0].uri })
         }
 
         // const response = await AxiosIntance("multipart/form-data").post('/media/upload', formData)
@@ -43,23 +45,23 @@ const AccountScreen = () => {
             </View>
             <View style={{ marginVertical: 10 }}>
                 {
-                    infoUser.avatar == '' ? (
-                        <ImageBackground source={require('../asset/avatar.png')} resizeMode="contain" style={[
+                    avatar ? (
+                        <View style={[styles.imgProfile]}>
+                        <Image source={{uri: avatar}} resizeMode="contain" style={[
                             styles.imgProfile,
+                            { justifyContent: 'flex-end', marginBottom: 10 }]}>
 
-                            { justifyContent: 'flex-end', marginBottom: 10 },]}>
-
-                            <Pressable onPress={getImageLibrary}>
-                                <Image
-                                    source={require('../asset/Pick-profile.png')}
-                                    resizeMode='contain'
-                                    style={{ alignSelf: 'flex-end' }}></Image>
-                            </Pressable>
-
-                        </ImageBackground>
+                        </Image>
+                        <Pressable onPress={getImageLibrary}>
+                            <Image
+                                source={require('../asset/Pick-profile.png')}
+                                resizeMode='contain'
+                                style={{ alignSelf: 'flex-end', position: 'absolute', right: 2, bottom: 4 }}></Image>
+                        </Pressable>
+                    </View>
                     ) : (
-                        <View style={[styles.imgProfile, { backgroundColor: "green" }]}>
-                            <Image source={{ uri: infoUser.avatar }} resizeMode="contain" style={[
+                        <View style={[styles.imgProfile]}>
+                            <Image source={require('../asset/avatar.png')} resizeMode="contain" style={[
                                 styles.imgProfile,
                                 { justifyContent: 'flex-end', marginBottom: 10 }]}>
 
@@ -73,7 +75,7 @@ const AccountScreen = () => {
                         </View>
                     )
                 }
-                <Text style={styles.userName}>Alex Johason</Text>
+                <Text style={styles.userName}>{name}</Text>
             </View>
             <View style={styles.content}>
                 <View style={styles.contentGroup}>

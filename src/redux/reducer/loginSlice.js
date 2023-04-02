@@ -12,13 +12,9 @@ export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (
             // console.log("+++++++++++++++" + JSON.stringify(response.data));
             return response.data
         })
-        .catch(function (error) {
-            // xử trí khi bị lỗi
+        .catch(function (error) {          
             console.log("fetchLoginThunk:  " + error);
         })
-        .finally(function () {
-            // luôn luôn được thực thi
-        });
     if (!data.error) {
         return data;
     }
