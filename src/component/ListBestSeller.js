@@ -17,17 +17,17 @@ const ProductItem = (props) => {
             margin: 3
         },
         styles.itemContainer]}>
-            <Image source={props.image}
+            <Image source={{uri: props.image}}
                 resizeMode='contain'
                 style={{
                     width: ITEM_SIZE - 2 * PADDING_INNER,
                     height: (ITEM_SIZE - 2 * PADDING_INNER) * (107 / 144),
                 }} />
             <Text style={styles.name}>{props.name}</Text>
-            <Text style={styles.type}>{props.type}</Text>
+            {/* <Text style={styles.type}>{props.category}</Text> */}
             <View style={styles.bottom}>
                 <Text style={styles.priceView}>
-                    <Text style={styles.name}>{props.pricePerKg}</Text>
+                    <Text style={styles.price}>${props.price}</Text>
                     <Text>/Kg</Text>
                 </Text>
                 <TouchableOpacity
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 12,
         fontWeight: '600',
-        color: '#000000'
+        color: '#000000',
+        marginBottom:8
     },
     type: {
         fontSize: 12,
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     },
     price: {
         fontSize: 14,
-        fontWeight: '600',
+        fontWeight: 'bold',
         color: '#000000'
     },
     priceView: {

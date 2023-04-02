@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import IP from "../../config/ip";
 
 export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (thunkParams) => {
     const { email, password } = thunkParams;
-    const data = await axios.post(`/api/user/login`, {
+    const data = await axios.post(`http://${IP}:3000/api/user/login`, {
         email,
         password
     })
@@ -18,7 +19,10 @@ export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (
         .finally(function () {
             // luôn luôn được thực thi
         });
-    return data;
+    if (!data.error) {
+        return data;
+    }
+    return null;
 })
 
 const loginSlice = createSlice({
@@ -47,10 +51,11 @@ const loginSlice = createSlice({
 
         builder.addCase(fetchLoginThunk.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.isLoggedIn = true;
+            // state.isLoggedIn = true;
             state.currentUser = { ...action.payload };
+            action.payload.error == false ? state.isLoggedIn = true : state.isLoggedIn = false;
             // console.log("****************" + JSON.stringify(action.payload));
-            // console.log("???????????????" + JSON.stringify(state));
+          //  console.log("???????????????" + JSON.stringify(state));
 
         });
 

@@ -6,18 +6,19 @@ import { useSelector } from "react-redux";
 const AppHeader = () => {
     const navigation = useNavigation();
     const { products } = useAppContext();
-    const userName = useSelector(state => state.login.currentUser.name);
+    // const userName = useSelector(state => state.login.currentUser.name);
+    const { user: { name } } = useSelector(state => state.login.currentUser);
     return (
         <View>
             <View style={styles.container}>
                 <Image source={require('../asset/avatar.png')} style={styles.avatar} />
                 <View style={styles.groupText}>
                     <Text style={styles.nameDisplay}>
-                        <Text style={styles.bold}>Hi</Text>, <Text>{userName}</Text>
+                        <Text style={styles.bold}>Hi</Text>, <Text>{name}</Text>
                     </Text>
                     <Text style={styles.desc}>What would you buy today?</Text>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate("BottomTab", {screen : 'Cart'})}>
+                <TouchableOpacity onPress={() => navigation.navigate("BottomTab", { screen: 'Cart' })}>
                     <Image source={require('../asset/ic-checkout.png')}></Image>
                     {products.length > 0 &&
                         <View style={styles.badge}>

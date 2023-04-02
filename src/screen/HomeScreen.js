@@ -14,9 +14,9 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const [products, isLoading, fetchProducts] = useProduct();
     const categoryList = useCategory();
-    const [type, setType] = useState("Vegetable");
+    const [type, setType] = useState("64238cf6fc13ae1b630003fc");
     useEffect(() => {
-        fetchProducts(type);   
+        fetchProducts(type);
     }, [type])
     return (
         <SafeAreaView style={styles.container}>

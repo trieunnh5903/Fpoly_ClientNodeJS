@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import IP from "../config/ip";
 
 // const listProducts = [
 //     {
@@ -53,14 +54,14 @@ import React, { useState, useEffect } from "react";
 export const useProduct = () => {
     const [listProducts, setListProducts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const fetchProducts = async (type, searchTerm) => {
+    const fetchProducts = async (idCategory, searchTerm) => {
         setIsLoading(true);
-        const res = await fetch(`/api/product/?type=${type || ''}&searchKey=${searchTerm || ''}`);
+        const res = await fetch(`http://${IP}:3000/api/product/?idCategory=${idCategory || ''}&searchKey=${searchTerm || ''}`);
         const data = await res.json();
         setListProducts(data || []);
         setIsLoading(false);
     };
-    
+
     const resetList = () => setListProducts([])
     return [listProducts, isLoading, fetchProducts, resetList];
 }

@@ -2,29 +2,22 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, Pressable } from
 import React from 'react'
 import colors from '../config/colors'
 
-const CATEGOTIES = [
-    { id: '1', name: 'Vegetable', image: require('../asset/vegetable.png') },
-    { id: '2', name: 'Fruit', image: require('../asset/fruit.png') },
-    { id: '3', name: 'Dairy', image: require('../asset/dairy.png') },
-    { id: '4', name: 'Meats', image: require('../asset/meats.png') },
-
-]
-const ListCategory = ({onChange, currentType, categories}) => {
+const ListCategory = ({ onChange, currentType, categories }) => {
     return (
         <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            >
-            {categories.map((item, index) => {
+        >
+            {categories.map((item, index) => {              
                 return (
-                    <TouchableOpacity
-                        onPress={() => onChange(item.name)}
-                        key={item.id} 
+                    <TouchableOpacity                 
+                        onPress={() => onChange(item._id)}
+                        key={item._id}
                         style={[styles.item,
-                            currentType == item.name && {backgroundColor: '#16C07B'}]}>
-                        <Image source={item.image} resizeMode='contain' />
+                        currentType == item._id && { backgroundColor: '#16C07B' }]}>
+                        <Image source={{ uri: item.image }} resizeMode='contain' style={{width: 22, height: 22}} />
                         <Text style={[styles.name,
-                          currentType == item.name && {color: 'white'}]}>{item.name}</Text>
+                        currentType == item._id && { color: 'white' }]}>{item.name}</Text>
                     </TouchableOpacity>
                 )
             })}
