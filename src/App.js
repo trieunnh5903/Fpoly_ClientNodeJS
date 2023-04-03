@@ -15,6 +15,7 @@ import NotificationScreen from './screen/NotificationScreen';
 import SearchScreen from './screen/SearchScreen';
 import { Provider } from "react-redux";
 import store from './redux/store';
+import DetailScreen from './screen/DetailScreen';
 
 const h = Dimensions.get('window').height
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ const StackNavigation = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Search' component={SearchScreen} />
+      <Stack.Screen name="Detail" component={DetailScreen} />
     </Stack.Navigator>
   )
 }

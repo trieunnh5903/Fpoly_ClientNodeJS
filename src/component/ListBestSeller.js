@@ -1,22 +1,26 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View, ToastAndroid } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View, ToastAndroid, Pressable } from 'react-native'
 import React from 'react'
 import colors from '../config/colors'
 import { useAppContext } from '../App';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductItem = (props) => {
     const window = useWindowDimensions();
     const ITEM_SIZE = (window.width - 2 * 14 - 14 - 4 * 3) / 2;
-    const { addProductToCart } = useAppContext()
+    const { addProductToCart } = useAppContext();
+    const navigation = useNavigation();
     return (
-        <View style={[{
-            width: ITEM_SIZE,
-            marginRight: props.index % 2 == 0 ? 14 : 0,
-            padding: 10,
-            borderRadius: 10,
-            margin: 3
-        },
-        styles.itemContainer]}>
-            <Image source={{uri: props.image}}
+        <Pressable
+            onPress={() => navigation.navigate("Stack", { screen: 'Detail' })}
+            style={[{
+                width: ITEM_SIZE,
+                marginRight: props.index % 2 == 0 ? 14 : 0,
+                padding: 10,
+                borderRadius: 10,
+                margin: 3
+            },
+            styles.itemContainer]}>
+            <Image source={{ uri: props.image }}
                 resizeMode='contain'
                 style={{
                     width: ITEM_SIZE - 2 * 10,
@@ -37,7 +41,7 @@ const ProductItem = (props) => {
                     <Image source={require('../asset/ic-add.png')} />
                 </TouchableOpacity>
             </View>
-        </View>
+        </Pressable>
     )
 }
 const ListBestSeller = ({ products }) => {
@@ -62,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '600',
         color: '#000000',
-        marginBottom:8
+        marginBottom: 8
     },
     type: {
         fontSize: 12,
