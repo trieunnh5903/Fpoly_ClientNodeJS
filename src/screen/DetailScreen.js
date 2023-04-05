@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Dimensions,
     Image,
@@ -13,14 +13,41 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import colors from '../config/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import IP from '../config/ip';
 
 const w = Dimensions.get('screen').width;
 
-const DetailScreen = () => {
+const DetailScreen = ({ route }) => {
+    const { productId } = route.params;
     const navigation = useNavigation();
     const onBack = () => navigation.goBack();
+
+    const fetchProduct = async () => {
+        try {
+            const response = await axios.get(`http://${IP}:3000/api/product?id=${productId}`);
+            console.log(response.data);
+        } catch (error) {
+            console.error("fetchProduct: " + error);
+        }
+    }
+    useEffect(() => {
+        fetchProduct();
+    }, [])
+
+    // const fetchProduct = async () => {
+    //     const res = await fetch(`http://${IP}:3000/api/category`);
+    //     const data = await res.json();
+    //     setCategoryList(data || []);
+    // };
+
+    // React.useEffect(() => {
+    //     fetchProduct()
+    // }, [])
+
+
     return (
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />
                 <View>
