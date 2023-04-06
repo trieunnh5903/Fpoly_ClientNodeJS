@@ -16,6 +16,7 @@ import SearchScreen from './screen/SearchScreen';
 import { Provider } from "react-redux";
 import store from './redux/store';
 import DetailScreen from './screen/DetailScreen';
+import RegisterScreen from './screen/RegisterScreen';
 
 const h = Dimensions.get('window').height
 const Stack = createNativeStackNavigator();
@@ -24,7 +25,9 @@ const AppContext = React.createContext(null);
 
 const StackNavigation = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name='Search' component={SearchScreen} />
       <Stack.Screen name="Detail" component={DetailScreen} />
     </Stack.Navigator>
@@ -133,7 +136,6 @@ function App() {
       <AppContext.Provider value={contextValue}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Stack" component={StackNavigation} />
             <Stack.Screen name="BottomTab" component={BottomTabsNavigation} />
           </Stack.Navigator>

@@ -21,12 +21,12 @@ const w = Dimensions.get('screen').width;
 const DetailScreen = ({ route }) => {
     const { productId } = route.params;
     const navigation = useNavigation();
-    const onBack = () => navigation.goBack();
-
+    const onBack = () => navigation.navigate("BottomTab", {screen: 'Home'});
+    const [product, setProduct] = useState({});
     const fetchProduct = async () => {
         try {
             const response = await axios.get(`http://${IP}:3000/api/product?id=${productId}`);
-            console.log(response.data);
+            setProduct(response.data);
         } catch (error) {
             console.error("fetchProduct: " + error);
         }
@@ -34,28 +34,25 @@ const DetailScreen = ({ route }) => {
     useEffect(() => {
         fetchProduct();
     }, [])
-
-    // const fetchProduct = async () => {
-    //     const res = await fetch(`http://${IP}:3000/api/category`);
-    //     const data = await res.json();
-    //     setCategoryList(data || []);
-    // };
-
-    // React.useEffect(() => {
-    //     fetchProduct()
-    // }, [])
-
-
     return (
         <View style={{ flex: 1 }}>
+            <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-                <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />
-                <View>
-                    <Image
-                        style={styles.image}
-                        resizeMode='cover'
-                        source={{ uri: 'https://images.unsplash.com/photo-1601726307617-b5dc98e5f315?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' }}
-                    />
+                <View style={styles.image}>
+                    {
+                        product.image != null ? (<Image
+                            style={{ flex: 1}}
+                            resizeMode='cover'
+                            source={{ uri: product.image }}
+                        />) : (
+                            <Image
+                                // style={styles.image}
+                                style={{ flex: 1 }}
+                                resizeMode='cover'
+                                source={{ uri: "https://images.unsplash.com/photo-1558818498-28c1e002b655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" }}
+                            />
+                        )
+                    }
                 </View>
                 <View style={styles.header}>
                     <Pressable onPress={onBack}>
@@ -71,18 +68,16 @@ const DetailScreen = ({ route }) => {
                 </View>
                 <View
                     style={{
-                        paddingTop: (w * 121) / 195 - 80,
+                        paddingTop: (w * 121) / 195 - 30,
                         // flex: 1,
                         paddingHorizontal: 20,
                         paddingBottom: 56,
                     }}>
+
                     <View>
                         <View style={styles.box}>
-                            {/* <Image style={styles.boxImage}
-                                resizeMode='cover'
-                                source={{ uri: 'https://images.unsplash.com/photo-1601726307617-b5dc98e5f315?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' }}></Image> */}
                             <View style={styles.boxInfo}>
-                                <Text style={styles.titleItem}>Apple</Text>
+                                <Text style={styles.titleItem}>{product.name}</Text>
                                 <View style={styles.starCon}>
                                     {Array(5)
                                         .fill(0)
@@ -96,9 +91,16 @@ const DetailScreen = ({ route }) => {
                                 </View>
                                 <View style={styles.footerCard}>
                                     <View style={styles.footerItem}>
-                                        <Text style={styles.footerItemText}>Fruits</Text>
+                                        {
+                                            product.category != null ? (
+                                                <Text style={styles.footerItemText}>{product.category.name}</Text>
+                                            ) : (
+                                                <Text style={styles.footerItemText}>Fruits</Text>
+                                            )
+                                        }
+
                                     </View>
-                                    <Text style={[styles.footerItemText, { marginLeft: 10 }]}>$5.66</Text>
+                                    <Text style={[styles.footerItemText, { marginLeft: 10 }]}>${product.price}</Text>
                                 </View>
                             </View>
                             <View style={styles.groupAction}>
@@ -182,12 +184,6 @@ const styles = StyleSheet.create({
         color: '#000000'
     },
 
-    boxImage: {
-        width: "33.3333%",
-        height: '100%',
-        borderRadius: 5
-    },
-
     groupAction: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -246,7 +242,7 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         // right: 15,
         // top: 1,
-        backgroundColor: '#FFF',
+        backgroundColor: '#F7F7F7',
         padding: 10,
         borderRadius: 100,
     },
@@ -255,6 +251,8 @@ const styles = StyleSheet.create({
         height: (w * 121) / 195,
         position: 'absolute',
         top: 0,
+        borderBottomColor: colors.gray,
+        borderBottomWidth: 0.5
     },
     title: {
         fontSize: 18,

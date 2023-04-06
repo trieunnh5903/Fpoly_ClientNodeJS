@@ -17,31 +17,40 @@ const ProductItem = (props) => {
             style={[{
                 width: ITEM_SIZE,
                 marginRight: props.index % 2 == 0 ? 14 : 0,
-                padding: 10,
                 borderRadius: 10,
                 margin: 3
             },
             styles.itemContainer]}>
-            <Image source={{ uri: props.image }}
-                resizeMode='contain'
+
+            <View
                 style={{
-                    width: ITEM_SIZE - 2 * 10,
+                    width: ITEM_SIZE,
                     height: (ITEM_SIZE - 2 * 10) * (107 / 144),
-                }} />
-            <Text style={styles.name}>{props.name}</Text>
-            {/* <Text style={styles.type}>{props.category}</Text> */}
-            <View style={styles.bottom}>
-                <Text style={styles.priceView}>
-                    <Text style={styles.price}>${props.price}</Text>
-                    <Text>/Kg</Text>
-                </Text>
-                <TouchableOpacity
-                    onPress={() => {
-                        addProductToCart(props);
-                        ToastAndroid.show(`Add ${props.name} to cart success!`, ToastAndroid.SHORT);
-                    }} >
-                    <Image source={require('../asset/ic-add.png')} />
-                </TouchableOpacity>
+                    paddingHorizontal: 2
+                }} >
+                <Image
+                    source={{ uri: props.image }}
+                    style={{ flex: 1, width: null, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
+                    resizeMode='contain'
+                />
+            </View>
+
+
+            <View style={{ padding: 10, }}>
+                <Text style={styles.name}>{props.name}</Text>
+                <View style={styles.bottom}>
+                    <Text style={styles.priceView}>
+                        <Text style={styles.price}>${props.price}</Text>
+                        <Text>/Kg</Text>
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            addProductToCart(props);
+                            ToastAndroid.show(`Add ${props.name} to cart success!`, ToastAndroid.SHORT);
+                        }} >
+                        <Image source={require('../asset/ic-add.png')} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </Pressable>
     )

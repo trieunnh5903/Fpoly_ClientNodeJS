@@ -8,27 +8,38 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchLoginThunk } from '../redux/reducer/loginSlice';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import IP from '../config/ip';
 
 const window = Dimensions.get('window');
 const LoginScreen = () => {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    const passwordRegex = /^(?=.*[a-zA-Z]).{8,}$/;
+    const passwordRegex = /^.{8}$/;
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+    const [isConfirmPasswordSecure, setIsConfirmPasswordSecure] = useState(true);
+    const [name, setName] = useState("")
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const { isLoggedIn, isLoading, error } = useSelector((state) => state.login)
-    useEffect(() => {
-        if (error) {
-            ToastAndroid.show("Email or password failed", ToastAndroid.SHORT);
-
-        }
-        if (isLoggedIn) {
-            navigation.navigate('BottomTab', { screen: 'Home' });
-        }
-    }, [isLoggedIn, error])
+    const [resultRegister, setResultRegister] = useState({});
+    const fetchRegister = async () => {
+        const data = await axios.post(`http://${IP}:3000/api/user/register`, { email: userEmail, password: userPassword, confirmPassword, name })
+            .then(function (response) {
+                console.log("+++++++++++++++" + JSON.stringify(response.data));
+                if (response.data.error == true) {
+                    ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+                } else {
+                    ToastAndroid.show("Success", ToastAndroid.SHORT);
+                    navigation.navigate("Stack", { screen: "Login" })
+                }
+            })
+            .catch(function (error) {
+                console.log("fetchLoginThunk:  " + error);
+            })
+    }
 
     const validateEmail = () => {
         if (emailRegex.test(userEmail)) {
@@ -47,10 +58,22 @@ const LoginScreen = () => {
             return false;
         }
     };
+
+    const validateConfirmPassword = () => {
+        if (userPassword == confirmPassword) {
+            return true;
+        } else {
+            ToastAndroid.show('Password does not match', ToastAndroid.SHORT);
+            return false;
+        }
+    }
+
     const loginHandler = () => {
-        if (validateEmail() && validatePassword()) {
+        if (validateEmail() && validatePassword() && validateConfirmPassword()) {
             // handle login logic here
-            dispatch(fetchLoginThunk({ email: userEmail, password: userPassword }));
+            // dispatch(fetchLoginThunk({ email: userEmail, password: userPassword }));
+            fetchRegister();
+            // navigation.navigate("Stack", { screen: "Username" })
         }
     };
 
@@ -60,9 +83,8 @@ const LoginScreen = () => {
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 <View style={styles.content}>
                     <View >
-                        <Text style={[styles.textTitle, styles.mb_6]}>Hello</Text>
-                        <Text style={[styles.textTitle, styles.colorBlue, styles.mb_6]}>Again!</Text>
-                        <Text style={[styles.colorGray, styles.textMessage, styles.mb_30]} >Welcome back you’ve {'\n'}been missed</Text>
+                        <Text style={[styles.textTitle, styles.colorBlue, styles.mb_6]}>Hello!</Text>
+                        <Text style={[styles.colorGray, styles.textMessage, styles.mb_30]} >Signup to get Started</Text>
 
                     </View>
 
@@ -89,29 +111,34 @@ const LoginScreen = () => {
 
                     </View>
 
-                    <View style={[styles.textForgotPassword, styles.mb_7]}>
-                        <View style={styles.textRemenberMe}>
-                            <CheckBox
-                                disabled={false}
-                                value={toggleCheckBox}
-                                onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                                tintColor={{ true: '#16C07B', false: '#16C07B' }}
-                                style={[styles.ml__7]}
-                            />
-                            <Text style={[styles.colorGray, styles.size_11]}>Remember me</Text>
+                    <View style={{ marginVertical: 10 }}>
+                        <Text style={[styles.size_11, styles.colorGray]}>Confirm Password<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <View style={styles.password}>
+                            <TextInput
+                                secureTextEntry={isConfirmPasswordSecure}
+                                cursorColor={"#3A3B3C"}
+                                onChangeText={(newString) => setConfirmPassword(newString)}
+                                style={[styles.textInput, { flex: 1 }]}></TextInput>
+                            <Pressable style={{ padding: 10 }} onPress={() => setIsConfirmPasswordSecure(!isConfirmPasswordSecure)}>
+                                <MaterialCommunityIcons name={isConfirmPasswordSecure ? "eye-off" : "eye"} size={24} color="#B0B3B8" />
+                            </Pressable>
                         </View>
-                        <Text style={[styles.size_11, styles.colorBlueDark]}>Forgot the password ?</Text>
+                    </View>
+
+                    <View>
+                        <Text style={[styles.size_11, styles.colorGray]}>Name<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <TextInput
+                            cursorColor={"#3A3B3C"}
+                            onChangeText={(newString) => setName(newString)}
+                            style={[styles.textInput, styles.mb_10]}></TextInput>
                     </View>
 
                     <View style={styles.mb_10}>
                         <Pressable style={styles.btnLogin} onPress={loginHandler}>
-
-
                             {isLoading == false ?
-                                (<Text style={[styles.textBtnLogin, styles.colorWhite]}>Login</Text>) :
+                                (<Text style={[styles.textBtnLogin, styles.colorWhite]}>Register</Text>) :
                                 <ActivityIndicator size={"small"} color={colors.white_bg} />
                             }
-
                         </Pressable>
                     </View>
 
@@ -137,7 +164,7 @@ const LoginScreen = () => {
 
                     <View>
                         <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>
-                            don’t have an account ? <Text onPress={() => navigation.navigate("Stack", {screen: "Register"})} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
+                            Already have an account ? <Text onPress={() => navigation.navigate("Stack", { screen: "Register" })} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign In</Text>
                         </Text>
                     </View>
                 </View>

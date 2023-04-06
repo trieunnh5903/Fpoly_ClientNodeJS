@@ -9,16 +9,13 @@ export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (
         password
     })
         .then(function (response) {
-            // console.log("+++++++++++++++" + JSON.stringify(response.data));
+            console.log("+++++++++++++++" + JSON.stringify(response.data));
             return response.data
         })
-        .catch(function (error) {          
+        .catch(function (error) {
             console.log("fetchLoginThunk:  " + error);
         })
-    if (!data.error) {
-        return data;
-    }
-    return null;
+    return data;
 })
 
 const loginSlice = createSlice({
@@ -26,6 +23,7 @@ const loginSlice = createSlice({
     initialState: {
         isLoading: false,
         isLoggedIn: false,
+        error: false,
         errorMessage: '',
         currentUser: {},
     },
@@ -43,20 +41,23 @@ const loginSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchLoginThunk.pending, (state, action) => {
             state.isLoading = true;
+            state.isLoggedIn = false;
         });
 
         builder.addCase(fetchLoginThunk.fulfilled, (state, action) => {
             state.isLoading = false;
-            // state.isLoggedIn = true;
-            state.currentUser = { ...action.payload };
-            action.payload.error == false ? state.isLoggedIn = true : state.isLoggedIn = false;
-            // console.log("****************" + JSON.stringify(action.payload));
-          //  console.log("???????????????" + JSON.stringify(state));
-
+            if (!action.payload.error) {
+                state.isLoggedIn = true;
+                state.currentUser = { ...action.payload };
+            } else {
+                state.isLoggedIn = false;
+                state.error = true;
+            }
         });
 
         builder.addCase(fetchLoginThunk.rejected, (state, action) => {
             state.isLoading = false;
+            state.isLoggedIn = false;
             state.errorMessage = "fetchLoginThunk rejected"
         });
 
