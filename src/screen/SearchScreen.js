@@ -7,16 +7,32 @@ import colors from '../config/colors'
 import SPACING from '../config/spacing'
 import ListProductSearch from '../component/ListProductSearch'
 import { useProduct } from '../hooks/useProduct'
+import axios from 'axios'
+import IP from '../config/ip'
 
 
 const SearchScreen = () => {
-  const [products, isLoading, fetchProducts, resetList] = useProduct();
+  const [isLoading, setIsLoading] = useState(false)
+  const [products, setListProducts] = useState([])
+  // const [products, isLoading, fetchProducts, resetList] = useProduct();
   const [searchTerm, setSearchTerm] = useState('');
   const navigation = useNavigation();
   //console.log(products);
   const resetSearch = () => {
     setSearchTerm('');
     resetList();
+  }
+  const resetList = () => setListProducts([])
+  const fetchSearch = async (keyword) => {
+    try {
+      setIsLoading(true)
+      const response = await axios.get(`http://${IP}:3000/api/product/search?q=${keyword}`);
+      setListProducts(response.data || []);
+      setIsLoading(false);
+      console.log(products);
+    } catch (error) {
+      console.error("fetchProduct: " + error);
+    }
   }
 
   let timeOut = null
@@ -27,7 +43,8 @@ const SearchScreen = () => {
         resetSearch();
       } else {
         // console.log(">>>>>>>>>>>" + text);
-        fetchProducts("", text);
+        // fetchProducts("", text);
+        fetchSearch(text);
         setSearchTerm(text)
         console.log(searchTerm.length);
       }
@@ -72,7 +89,7 @@ const SearchScreen = () => {
                 {searchTerm.length > 0 && <Text style={styles.textFound}>Not Found</Text>}
               </>
             )
-          }       
+          }
         </ScrollView>
       </View>
 

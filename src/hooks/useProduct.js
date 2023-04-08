@@ -62,6 +62,14 @@ export const useProduct = () => {
         setIsLoading(false);
     };
 
+    // const fetchSearch = async (searchKey) => {
+    //     setIsLoading(true);
+    //     const res = await fetch(`http://${IP}:3000/api/product/?q=${searchKey || ''}`);
+    //     const data = await res.json();
+    //     setListProducts(data || []);
+    //     setIsLoading(false);
+    // }
+
     const resetList = () => setListProducts([])
     return [listProducts, isLoading, fetchProducts, resetList];
 }

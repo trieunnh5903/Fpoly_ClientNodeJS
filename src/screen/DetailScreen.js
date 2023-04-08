@@ -20,6 +20,7 @@ const w = Dimensions.get('screen').width;
 
 const DetailScreen = ({ route }) => {
     const { productId } = route.params;
+    // console.log("productId : "+ productId);
     const navigation = useNavigation();
     const onBack = () => navigation.navigate("BottomTab", {screen: 'Home'});
     const [product, setProduct] = useState({});
@@ -27,13 +28,14 @@ const DetailScreen = ({ route }) => {
         try {
             const response = await axios.get(`http://${IP}:3000/api/product?id=${productId}`);
             setProduct(response.data);
+            // console.log(JSON.stringify(response.data));
         } catch (error) {
             console.error("fetchProduct: " + error);
         }
     }
     useEffect(() => {
         fetchProduct();
-    }, [])
+    }, [productId])
     return (
         <View style={{ flex: 1 }}>
             <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />

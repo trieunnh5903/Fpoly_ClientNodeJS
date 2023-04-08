@@ -26,9 +26,9 @@ const LoginScreen = () => {
     const { isLoggedIn, isLoading, error } = useSelector((state) => state.login)
     const [resultRegister, setResultRegister] = useState({});
     const fetchRegister = async () => {
-        const data = await axios.post(`http://${IP}:3000/api/user/register`, { email: userEmail, password: userPassword, confirmPassword, name })
+         await axios.post(`http://${IP}:3000/api/user/register`, { email: userEmail, password: userPassword, confirmPassword, name })
             .then(function (response) {
-                console.log("+++++++++++++++" + JSON.stringify(response.data));
+                // console.log("+++++++++++++++" + JSON.stringify(response.data));
                 if (response.data.error == true) {
                     ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
                 } else {
@@ -37,7 +37,7 @@ const LoginScreen = () => {
                 }
             })
             .catch(function (error) {
-                console.log("fetchLoginThunk:  " + error);
+                console.log("fetchRegister:  " + error);
             })
     }
 
@@ -89,7 +89,7 @@ const LoginScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={[styles.size_11, styles.colorGray]}>Phone Number<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <Text style={[styles.size_11, styles.colorGray]}>Email<Text style={{ color: '#FF84B7' }}>*</Text></Text>
                         <TextInput
                             cursorColor={"#3A3B3C"}
                             onChangeText={(newString) => setUserEmail(newString)}
