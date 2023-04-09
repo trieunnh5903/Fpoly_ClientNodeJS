@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { restoreStatusLogin } from '../redux/reducer/loginSlice';
 import colors from '../config/colors';
+import MyStatusBar from '../component/MyStatusBar';
 const SplashScreen = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -26,9 +27,6 @@ const SplashScreen = () => {
                 if (isLoggedIn && loginData) {
                     dispatch(restoreStatusLogin({ isLoggedIn, loginData }));
                 }
-                // } else {
-                //     navigation.navigate("Login");
-                // }
             } catch (e) {
                 console.log("restore Data login: " + e);
             }
@@ -38,11 +36,11 @@ const SplashScreen = () => {
     }, []);
 
     React.useEffect(() => {
-        setTimeout(() => {
+        setTimeout(async () => {
             if (isLoggedIn) {
-                navigation.replace("Tabs", { screen: "Home" });
+                await navigation.replace("HomeStack", { screen: "Tabs" });
             } else {
-                navigation.replace("LoginStack", { screen: "Login" });
+                await navigation.replace("LoginStack", { screen: "Login" });
             }
         }, 2000);
 
@@ -50,7 +48,8 @@ const SplashScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.logo} source={require("../asset/logo.png")} resizeMode='contain'/>
+            <MyStatusBar />
+            <Image style={styles.logo} source={require("../asset/logo.png")} resizeMode='contain' />
         </View>
     )
 }
@@ -66,6 +65,6 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: Dimensions.get("window").width * 0.6,
-        height: (Dimensions.get("window").width * 0.6) * 178 / 262 
+        height: (Dimensions.get("window").width * 0.6) * 178 / 262
     }
 })

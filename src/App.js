@@ -28,8 +28,8 @@ const AppContext = React.createContext(null);
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator initialRouteName='HomeScreen' screenOptions={{ headerShown: false }}>
-      <HomeStack.Screen name='HomeScreen' component={HomeScreen} />
+    <HomeStack.Navigator initialRouteName='Tabs'  screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name='Tabs' component={BottomTabsNavigation} />
       <HomeStack.Screen name='SearchScreen' component={SearchScreen} />
       <HomeStack.Screen name="DetailScreen" component={DetailScreen} />
     </HomeStack.Navigator>
@@ -83,7 +83,7 @@ const BottomTabsNavigation = () => {
         },
 
       })}>
-      <Tab.Screen name="Home" component={HomeStackScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Cart" component={OrderScreen} options={() => ({
         tabBarStyle: {
           display: "none",
@@ -149,7 +149,7 @@ function App() {
           <Stack.Navigator initialRouteName='SplashScreen' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="LoginStack" component={LoginStackScreen} />
-            <Stack.Screen name="Tabs" component={BottomTabsNavigation} />
+            <Stack.Screen name="HomeStack" component={HomeStackScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </AppContext.Provider>

@@ -25,7 +25,7 @@ const LoginScreen = () => {
             ToastAndroid.show("Email or password failed", ToastAndroid.SHORT);
         }
         if (isLoggedIn) {
-            navigation.replace('Tabs', { screen: 'Home' });
+            navigation.replace('HomeStack', { screen: 'Tabs' });
         }
     }, [isLoggedIn, error])
 

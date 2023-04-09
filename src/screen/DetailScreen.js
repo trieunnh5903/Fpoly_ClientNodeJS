@@ -22,7 +22,7 @@ const DetailScreen = ({ route }) => {
     const { productId } = route.params;
     // console.log("productId : "+ productId);
     const navigation = useNavigation();
-    const onBack = () => navigation.navigate("BottomTab", {screen: 'Home'});
+    const onBack = () => navigation.goBack();
     const [product, setProduct] = useState({});
     const fetchProduct = async () => {
         try {
