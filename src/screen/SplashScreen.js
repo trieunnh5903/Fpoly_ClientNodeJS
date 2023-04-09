@@ -44,7 +44,7 @@ const SplashScreen = () => {
             }
         }, 2000);
 
-    }, [isLoggedIn])
+    }, [])
 
     return (
         <View style={styles.container}>

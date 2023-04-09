@@ -6,15 +6,15 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View,
-    StatusBar,
-    TouchableOpacity
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../config/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import IP from '../config/ip';
+import MyStatusBar from '../component/MyStatusBar';
 
 const w = Dimensions.get('screen').width;
 
@@ -37,25 +37,12 @@ const DetailScreen = ({ route }) => {
         fetchProduct();
     }, [productId])
     return (
-        <View style={{ flex: 1 }}>
-            <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />
+        <View style={{ flex: 1, backgroundColor: colors.white_bg }} >
+            {/* back ground oval */}
+            <MyStatusBar/>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-                <View style={styles.image}>
-                    {
-                        product.image != null ? (<Image
-                            style={{ flex: 1}}
-                            resizeMode='cover'
-                            source={{ uri: product.image }}
-                        />) : (
-                            <Image
-                                // style={styles.image}
-                                style={{ flex: 1 }}
-                                resizeMode='cover'
-                                source={{ uri: "https://images.unsplash.com/photo-1558818498-28c1e002b655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" }}
-                            />
-                        )
-                    }
-                </View>
+                <View style={styles.bgOval}></View>
+                {/*  header */}
                 <View style={styles.header}>
                     <Pressable onPress={onBack}>
                         <Image source={require('../asset/ic-back.png')} />
@@ -68,74 +55,175 @@ const DetailScreen = ({ route }) => {
                         />
                     </Pressable>
                 </View>
-                <View
-                    style={{
-                        paddingTop: (w * 121) / 195 - 30,
-                        // flex: 1,
-                        paddingHorizontal: 20,
-                        paddingBottom: 56,
-                    }}>
-
-                    <View>
-                        <View style={styles.box}>
-                            <View style={styles.boxInfo}>
-                                <Text style={styles.titleItem}>{product.name}</Text>
-                                <View style={styles.starCon}>
-                                    {Array(5)
-                                        .fill(0)
-                                        .map((item, index) => (
-                                            <Image
-                                                key={index}
-                                                style={styles.star}
-                                                source={require('../asset/star.png')}
-                                            />
-                                        ))}
-                                </View>
-                                <View style={styles.footerCard}>
-                                    <View style={styles.footerItem}>
-                                        {
-                                            product.category != null ? (
-                                                <Text style={styles.footerItemText}>{product.category.name}</Text>
-                                            ) : (
-                                                <Text style={styles.footerItemText}>Fruits</Text>
-                                            )
-                                        }
-
-                                    </View>
-                                    <Text style={[styles.footerItemText, { marginLeft: 10 }]}>${product.price}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.groupAction}>
-                                {/* onPress={() => removeProductFromCart(item)} */}
-                                <TouchableOpacity>
-                                    <Image source={require('../asset/ic-remove.png')} />
-                                </TouchableOpacity>
-                                <Text style={styles.quantity}>{1}</Text>
-                                {/* onPress={() => addProductToCart(item)} */}
-                                <TouchableOpacity >
-                                    <Image source={require('../asset/ic-add.png')} />
-                                </TouchableOpacity>
-                            </View>
-
+                {/* image */}
+                <View style={styles.imageGroup}>
+                    {
+                        product.image != null ? (<Image
+                            style={styles.image}
+                            source={{ uri: product.image }}
+                        />) : (
+                            <Image
+                                style={styles.image}
+                                resizeMode='cover'
+                                source={{ uri: "https://images.unsplash.com/photo-1558818498-28c1e002b655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" }}
+                            />
+                        )
+                    }
+                </View>
+                {/* infor */}
+                <View style={{ marginHorizontal: 20 }}>
+                    <View style={styles.flexNameProduct}>
+                        <Text style={styles.nameProduct}>{product.name}</Text>
+                        <View style={styles.groupAction}>
+                            <TouchableOpacity>
+                                <Image style={{width: 24, height: 24}} resizeMode='cover' source={require('../asset/ic-remove.png')} />
+                            </TouchableOpacity>
+                            <Text style={styles.quantity}>{1}Kg</Text>
+                            <TouchableOpacity >
+                                <Image style={{width: 24, height: 24}} resizeMode='cover'  source={require('../asset/ic-add.png')} />
+                            </TouchableOpacity>
                         </View>
                     </View>
 
-                    <View>
-                        <Text style={[styles.title, { color: colors.black }]}>
-                            Descriptions
-                        </Text>
-                        <Text style={styles.text}>
-                            Apple Mountain works as a seller for many apple growers of apple. apple are easy to spot in your produce aisle. They are just like regular apple, but they will usually have a few more scars on...
-                            <Text style={{ color: colors.green }}> ReadMore</Text>
-                        </Text>
+                    <View style={styles.footerItem}>
+                        {
+                            product.category != null ?
+                                (
+                                    <Text style={styles.footerItemText}>{product.category.name}</Text>
+                                ) : (
+                                    <Text style={styles.footerItemText}>Fruits</Text>
+                                )
+                        }
                     </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{marginEnd: 3}}>5</Text>
+                        <View style={styles.starCon}>
+                            {Array(5)
+                                .fill(0)
+                                .map((item, index) => (
+                                    <Image
+                                        key={index}
+                                        style={styles.star}
+                                        source={require('../asset/star.png')}
+                                    />
+                                ))}
+                        </View>
+                        <Text>(89 reviews)</Text>
+                    </View>
+                    <Text style={[styles.price]}>${product.price}</Text>
                 </View>
+
+                {/* Description */}
+
+                <View style={{paddingHorizontal: 20}}>
+                    <Text style={[styles.title, { color: colors.black }]}>
+                        Descriptions
+                    </Text>
+                    <Text style={styles.text}>
+                        Apple Mountain works as a seller for many apple growers of apple. apple are easy to spot in your produce aisle. They are just like regular apple, but they will usually have a few more scars on...
+                        <Text style={{ color: colors.green }}> ReadMore</Text>
+                    </Text>
+                </View>
+
             </ScrollView>
             <Pressable style={styles.buttonAddToCart}>
                 <MaterialCommunityIcons name={'cart'} size={20} color={colors.white_bg} />
                 <Text style={styles.textAddtoCart}>Add to cart</Text>
             </Pressable>
+            {/* <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+            <View style={styles.image}>
+                {
+                    product.image != null ? (<Image
+                        style={{ flex: 1}}
+                        resizeMode='cover'
+                        source={{ uri: product.image }}
+                    />) : (
+                        <Image
+                            style={{ flex: 1 }}
+                            resizeMode='cover'
+                            source={{ uri: "https://images.unsplash.com/photo-1558818498-28c1e002b655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" }}
+                        />
+                    )
+                }
+            </View>
+            <View style={styles.header}>
+                <Pressable onPress={onBack}>
+                    <Image source={require('../asset/ic-back.png')} />
+                </Pressable>
+                <Pressable style={styles.buttonHeart}>
+                    <Image
+                        source={require('../asset/heart.png')}
+                        style={styles.iconHeart}
+                        resizeMode="contain"
+                    />
+                </Pressable>
+            </View>
+            <View
+                style={{
+                    paddingTop: (w * 121) / 195 - 30,
+                    paddingHorizontal: 20,
+                    paddingBottom: 56,
+                }}>
+
+                <View>
+                    <View style={styles.box}>
+                        <View style={styles.boxInfo}>
+                            <Text style={styles.titleItem}>{product.name}</Text>
+                            <View style={styles.starCon}>
+                                {Array(5)
+                                    .fill(0)
+                                    .map((item, index) => (
+                                        <Image
+                                            key={index}
+                                            style={styles.star}
+                                            source={require('../asset/star.png')}
+                                        />
+                                    ))}
+                            </View>
+                            <View style={styles.footerCard}>
+                                <View style={styles.footerItem}>
+                                    {
+                                        product.category != null ? (
+                                            <Text style={styles.footerItemText}>{product.category.name}</Text>
+                                        ) : (
+                                            <Text style={styles.footerItemText}>Fruits</Text>
+                                        )
+                                    }
+
+                                </View>
+                                <Text style={[styles.footerItemText, { marginLeft: 10 }]}>${product.price}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.groupAction}>
+                            <TouchableOpacity>
+                                <Image source={require('../asset/ic-remove.png')} />
+                            </TouchableOpacity>
+                            <Text style={styles.quantity}>{1}</Text>
+                            <TouchableOpacity >
+                                <Image source={require('../asset/ic-add.png')} />
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                </View>
+
+                <View>
+                    <Text style={[styles.title, { color: colors.black }]}>
+                        Descriptions
+                    </Text>
+                    <Text style={styles.text}>
+                        Apple Mountain works as a seller for many apple growers of apple. apple are easy to spot in your produce aisle. They are just like regular apple, but they will usually have a few more scars on...
+                        <Text style={{ color: colors.green }}> ReadMore</Text>
+                    </Text>
+                </View>
+            </View>
+        </ScrollView> */}
+            {/* <Pressable style={styles.buttonAddToCart}>
+            <MaterialCommunityIcons name={'cart'} size={20} color={colors.white_bg} />
+            <Text style={styles.textAddtoCart}>Add to cart</Text>
+        </Pressable> */}
         </View>
+
 
     );
 };
@@ -144,22 +232,46 @@ export default DetailScreen;
 
 const styles = StyleSheet.create({
     header: {
-        position: 'absolute',
-        top: 45,
+        paddingTop: 36,
         justifyContent: 'space-between',
         paddingHorizontal: 20,
         flexDirection: 'row',
         width: '100%',
-        zIndex: 9999,
+        position: 'relative'
     },
+
+    bgOval: {
+        width: w * 1.5,
+        aspectRatio: 1,
+        backgroundColor: colors.green,
+        position: 'absolute',
+        borderRadius: w,
+        alignSelf: 'center',
+        top:  - w * 0.8
+    },
+
+    nameProduct: {
+        width: '60%',
+        fontWeight: 700,
+        fontSize: 30,
+        lineHeight: 40,
+        color: colors.black,
+    },
+    imageGroup: {
+        flex: 1, alignItems: 'center', marginTop: 20, marginBottom: 5
+    },
+
     titleItem: {
         color: colors.black,
         fontSize: 20,
         fontWeight: '700',
     },
     footerItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
+
+    },
+
+    flexNameProduct: {
+        flexDirection: 'row', justifyContent: 'space-between'
     },
 
     buttonAddToCart: {
@@ -190,7 +302,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '50%'
     },
 
     boxInfo: {
@@ -220,12 +331,11 @@ const styles = StyleSheet.create({
     },
     starCon: {
         flexDirection: 'row',
-        marginVertical: 9,
     },
     star: {
-        width: 15,
-        height: 15,
-        marginRight: 5,
+        width: 13,
+        height: 13,
+        marginRight: 3,
     },
     footerCard: {
         flexDirection: 'row',
@@ -235,7 +345,11 @@ const styles = StyleSheet.create({
     footerItemText: {
         fontSize: 14,
         color: colors.black,
-        fontWeight: '700',
+    },
+    price: {
+        fontSize: 14,
+        color: colors.green,
+        fontWeight: 'bold'
     },
     iconHeart: {
         tintColor: 'black'
@@ -249,12 +363,9 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     image: {
-        width: w,
-        height: (w * 121) / 195,
-        position: 'absolute',
-        top: 0,
-        borderBottomColor: colors.gray,
-        borderBottomWidth: 0.5
+        width: w * 0.6,
+        height: w * 0.6,
+        borderRadius: w,
     },
     title: {
         fontSize: 18,
