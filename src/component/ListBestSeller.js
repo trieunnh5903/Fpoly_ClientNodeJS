@@ -11,9 +11,9 @@ const ProductItem = (props) => {
     const navigation = useNavigation();
     return (
         <Pressable
-            onPress={() => {
-                navigation.navigate("Stack", { screen: 'Detail', params: { productId: props._id }, })
-            }}
+            // onPress={() => {
+            //     navigation.navigate("Stack", { screen: 'Detail', params: { productId: props._id }, })
+            // }}
             style={[{
                 width: ITEM_SIZE,
                 marginRight: props.index % 2 == 0 ? 14 : 0,

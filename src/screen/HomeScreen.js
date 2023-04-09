@@ -23,7 +23,7 @@ const HomeScreen = () => {
             <StatusBar backgroundColor={"#FDFDFD"} barStyle='dark-content' />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
                 <AppHeader />
-                <Pressable onPress={() => navigation.navigate("Stack", { screen: "Search" })}>
+                <Pressable onPress={() => navigation.navigate("SearchScreen")}>
                     <View style={styles.searchContainer}>
                         <Image source={require('../asset/ic-search.png')} />
                         <Text style={styles.searchText}>Seach buy item name</Text>

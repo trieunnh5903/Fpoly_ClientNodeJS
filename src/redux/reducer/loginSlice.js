@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import IP from "../../config/ip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (thunkParams) => {
     const { email, password } = thunkParams;
@@ -10,6 +11,10 @@ export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (
     })
         .then(function (response) {
             console.log("+++++++++++++++" + JSON.stringify(response.data));
+            // setLoginLocal(response.data);
+            if (!response.data.error) {
+                setLoginLocal(true, response.data);
+            }
             return response.data
         })
         .catch(function (error) {
@@ -18,13 +23,22 @@ export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (
     return data;
 })
 
+const setLoginLocal = async (isLoggedIn, loginData) => {
+    try {
+        await AsyncStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+        await AsyncStorage.setItem('loginData', JSON.stringify(loginData));
+    } catch (err) {
+        console.log("setLoginLocal: " + err);
+    }
+};
+
 const loginSlice = createSlice({
     name: "login",
     initialState: {
         isLoading: false,
         isLoggedIn: false,
         error: false,
-        errorMessage: '',
+        isRestoreStatus: false,
         currentUser: {},
     },
 
@@ -36,6 +50,21 @@ const loginSlice = createSlice({
             state.password = action.payload.password
             state.name = action.payload.name
         },
+        restoreStatusLogin: (state, action) => {
+            // console.log("????????????" + JSON.stringify(action.payload.loginData));
+            state.currentUser = { ...action.payload.loginData };
+            state.isLoggedIn = true;
+            state.error = false;
+            state.isRestoreStatus = true;
+        },
+        logoutUser: (state, action) => {
+            state.isLoggedIn = false;
+            state.isRestoreStatus = false;
+            // state.currentUser = null;
+            state.error = false;
+        }
+
+
     },
 
     extraReducers: (builder) => {
@@ -49,6 +78,7 @@ const loginSlice = createSlice({
             if (!action.payload.error) {
                 state.isLoggedIn = true;
                 state.currentUser = { ...action.payload };
+                state.error = false;
             } else {
                 state.isLoggedIn = false;
                 state.error = true;
@@ -58,12 +88,12 @@ const loginSlice = createSlice({
         builder.addCase(fetchLoginThunk.rejected, (state, action) => {
             state.isLoading = false;
             state.isLoggedIn = false;
-            state.errorMessage = "fetchLoginThunk rejected"
+            console.log("fetchLoginThunk rejected");
         });
 
 
     },
 })
 
-export const { setLoginState } = loginSlice.actions
+export const { setLoginState, restoreStatusLogin, logoutUser } = loginSlice.actions
 export default loginSlice.reducer

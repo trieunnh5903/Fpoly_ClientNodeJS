@@ -5,10 +5,13 @@ import { launchImageLibrary } from 'react-native-image-picker'
 import colors from '../config/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useSelector  } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from '../redux/reducer/loginSlice'
+import { CommonActions, useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const window = Dimensions.get('window');
 const AccountScreen = () => {
-    const { user: {name, avatar } } = useSelector(state => state.login.currentUser);
+    const { user: { name, avatar } } = useSelector(state => state.login.currentUser);
     // const [infoUser, setInfoUser] = useState({ avatar: '' })
     const getImageLibrary = async () => {
         const result = await launchImageLibrary();
@@ -34,31 +37,49 @@ const AccountScreen = () => {
     }
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const handleReset = () => {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    {name: 'LoginStack'},
+                ]
+            })
+        )
+    };
+    const handleLogout = async() => {
+        dispatch(logoutUser());
+        await AsyncStorage.clear();
+        handleReset();
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
-                <View  style={styles.imageButton}/>
+                <View style={styles.imageButton} />
                 <View style={styles.headerMiddle}>
                     <Text style={styles.headerText}>Profile</Text>
                 </View>
-                <View  style={styles.imageButton}/>
+                <View style={styles.imageButton} />
             </View>
             <View style={{ marginVertical: 10 }}>
                 {
                     avatar ? (
                         <View style={[styles.imgProfile]}>
-                        <Image source={{uri: avatar}} resizeMode="contain" style={[
-                            styles.imgProfile,
-                            { justifyContent: 'flex-end', marginBottom: 10 }]}>
+                            <Image source={{ uri: avatar }} resizeMode="contain" style={[
+                                styles.imgProfile,
+                                { justifyContent: 'flex-end', marginBottom: 10 }]}>
 
-                        </Image>
-                        <Pressable onPress={getImageLibrary}>
-                            <Image
-                                source={require('../asset/Pick-profile.png')}
-                                resizeMode='contain'
-                                style={{ alignSelf: 'flex-end', position: 'absolute', right: 2, bottom: 4 }}></Image>
-                        </Pressable>
-                    </View>
+                            </Image>
+                            <Pressable onPress={getImageLibrary}>
+                                <Image
+                                    source={require('../asset/Pick-profile.png')}
+                                    resizeMode='contain'
+                                    style={{ alignSelf: 'flex-end', position: 'absolute', right: 2, bottom: 4 }}></Image>
+                            </Pressable>
+                        </View>
                     ) : (
                         <View style={[styles.imgProfile]}>
                             <Image source={require('../asset/avatar.png')} resizeMode="contain" style={[
@@ -126,6 +147,10 @@ const AccountScreen = () => {
                             value={isEnabled}
                         />
                     </View>
+                    <Pressable style={styles.groupItem} onPress={handleLogout}>
+                        <MaterialCommunityIcons name={'logout'} size={25} />
+                        <Text style={styles.itemText}>Logout</Text>
+                    </Pressable>
                 </View>
             </View>
         </SafeAreaView>

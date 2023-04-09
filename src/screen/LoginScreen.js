@@ -1,5 +1,5 @@
 import { Pressable, SafeAreaView, KeyboardAvoidingView, StyleSheet, StatusBar, Text, TextInput, View, Image, ActivityIndicator, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native'
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,10 +23,9 @@ const LoginScreen = () => {
     useEffect(() => {
         if (error) {
             ToastAndroid.show("Email or password failed", ToastAndroid.SHORT);
-
         }
         if (isLoggedIn) {
-            navigation.navigate('BottomTab', { screen: 'Home' });
+            navigation.replace('Tabs', { screen: 'Home' });
         }
     }, [isLoggedIn, error])
 
@@ -67,7 +66,7 @@ const LoginScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={[styles.size_11, styles.colorGray]}>Phone Number<Text style={{ color: '#FF84B7' }}>*</Text></Text>
+                        <Text style={[styles.size_11, styles.colorGray]}>Email<Text style={{ color: '#FF84B7' }}>*</Text></Text>
                         <TextInput
                             cursorColor={"#3A3B3C"}
                             onChangeText={(newString) => setUserEmail(newString)}
@@ -137,7 +136,7 @@ const LoginScreen = () => {
 
                     <View>
                         <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>
-                            don’t have an account ? <Text onPress={() => navigation.navigate("Stack", {screen: "Register"})} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
+                            don’t have an account ? <Text style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
                         </Text>
                     </View>
                 </View>

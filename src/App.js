@@ -17,20 +17,31 @@ import { Provider } from "react-redux";
 import store from './redux/store';
 import DetailScreen from './screen/DetailScreen';
 import RegisterScreen from './screen/RegisterScreen';
+import SplashScreen from './screen/SplashScreen';
 
 const h = Dimensions.get('window').height
 const Stack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
+const AuthStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AppContext = React.createContext(null);
 
-const StackNavigation = () => {
+const HomeStackScreen = () => {
   return (
-    <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name='Search' component={SearchScreen} />
-      <Stack.Screen name="Detail" component={DetailScreen} />
-    </Stack.Navigator>
+    <HomeStack.Navigator initialRouteName='HomeScreen' screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name='HomeScreen' component={HomeScreen} />
+      <HomeStack.Screen name='SearchScreen' component={SearchScreen} />
+      <HomeStack.Screen name="DetailScreen" component={DetailScreen} />
+    </HomeStack.Navigator>
+  )
+}
+
+const LoginStackScreen = () => {
+  return (
+    <AuthStack.Navigator initialRouteName='LoginScreen' screenOptions={{ headerShown: false }}>
+      <AuthStack.Screen name="LoginScreen" component={LoginScreen} />
+      <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} />
+    </AuthStack.Navigator>
   )
 }
 
@@ -72,7 +83,7 @@ const BottomTabsNavigation = () => {
         },
 
       })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeStackScreen} />
       <Tab.Screen name="Cart" component={OrderScreen} options={() => ({
         tabBarStyle: {
           display: "none",
@@ -135,9 +146,10 @@ function App() {
     <Provider store={store}>
       <AppContext.Provider value={contextValue}>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Stack" component={StackNavigation} />
-            <Stack.Screen name="BottomTab" component={BottomTabsNavigation} />
+          <Stack.Navigator initialRouteName='SplashScreen' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="LoginStack" component={LoginStackScreen} />
+            <Stack.Screen name="Tabs" component={BottomTabsNavigation} />
           </Stack.Navigator>
         </NavigationContainer>
       </AppContext.Provider>

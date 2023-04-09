@@ -55,7 +55,7 @@ const SearchScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.flexView}>
         <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("BottomTab", { screen: 'Home' })}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               style={styles.imageButton}
               source={require('../asset/ic-back.png')} />

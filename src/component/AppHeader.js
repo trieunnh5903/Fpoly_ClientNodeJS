@@ -11,7 +11,7 @@ const AppHeader = () => {
     return (
         <View>
             <View style={styles.container}>
-                <Pressable onPress={() => navigation.navigate("BottomTab", { screen: 'Account' })}>
+                <Pressable onPress={() => navigation.navigate("Account")}>
                     {
                         avatar ? (
                             <Image source={{ uri: avatar }} style={styles.avatar} />
@@ -27,7 +27,8 @@ const AppHeader = () => {
                     </Text>
                     <Text style={styles.desc}>What would you buy today?</Text>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate("BottomTab", { screen: 'Cart' })}>
+                
+                <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                     <Image source={require('../asset/ic-checkout.png')}></Image>
                     {products.length > 0 &&
                         <View style={styles.badge}>
