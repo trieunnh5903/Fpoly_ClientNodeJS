@@ -101,11 +101,6 @@ const AccountScreen = () => {
             <View style={styles.content}>
                 <View style={styles.contentGroup}>
                     <Text style={styles.title}>Account</Text>
-                    {/* <View style={styles.groupItem}>
-                        <MaterialCommunityIcons name={'account'} size={25} />
-                        <Text style={styles.itemText}>Edit Profile</Text>
-                        <MaterialCommunityIcons name={'chevron-right'} size={25} />
-                    </View> */}
                     <View style={styles.groupItem}>
                         <MaterialCommunityIcons name={'key'} size={25} />
                         <Text style={styles.itemText}>Change Password</Text>
