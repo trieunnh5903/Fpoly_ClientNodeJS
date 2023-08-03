@@ -24,7 +24,6 @@ const LoginScreen = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const { isLoggedIn, isLoading, error } = useSelector((state) => state.login)
-    const [resultRegister, setResultRegister] = useState({});
     const fetchRegister = async () => {
          await axios.post(`http://${IP}:3000/api/user/register`, { email: userEmail, password: userPassword, confirmPassword, name })
             .then(function (response) {
@@ -33,7 +32,7 @@ const LoginScreen = () => {
                     ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show("Success", ToastAndroid.SHORT);
-                    navigation.navigate("Stack", { screen: "Login" })
+                    navigation.navigate("LoginScreen")
                 }
             })
             .catch(function (error) {
@@ -164,7 +163,7 @@ const LoginScreen = () => {
 
                     <View>
                         <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>
-                            Already have an account ? <Text onPress={() => navigation.navigate("Stack", { screen: "Register" })} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign In</Text>
+                            Already have an account ? <Text onPress={() => navigation.navigate("LoginScreen")} style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign In</Text>
                         </Text>
                     </View>
                 </View>

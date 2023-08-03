@@ -7,7 +7,7 @@ const AppHeader = () => {
     const navigation = useNavigation();
     const { products } = useAppContext();
     // const userName = useSelector(state => state.login.currentUser.name);
-    const { user: { name, avatar } } = useSelector(state => state.login.currentUser);
+    const { name, avatar } = useSelector(state => state.login.currentUser);
     return (
         <View>
             <View style={styles.container}>
@@ -27,7 +27,7 @@ const AppHeader = () => {
                     </Text>
                     <Text style={styles.desc}>What would you buy today?</Text>
                 </View>
-                
+
                 <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                     <Image source={require('../asset/ic-checkout.png')}></Image>
                     {products.length > 0 &&

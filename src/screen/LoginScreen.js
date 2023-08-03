@@ -134,10 +134,17 @@ const LoginScreen = () => {
                         </Pressable>
                     </View>
 
-                    <View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
                         <Text style={[styles.colorGray, styles.size_11, styles.textCenter]}>
-                            don’t have an account ? <Text style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
+                            don’t have an account ?
                         </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+                            <Text style={[styles.colorBlue, { fontWeight: 'bold' }]}>Sign Up</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </KeyboardAvoidingView>
@@ -227,7 +234,7 @@ const styles = StyleSheet.create({
     },
 
     textCenter: {
-        textAlign: 'center'
+        textAlign: 'center',
     },
     mb_6: {
         marginBottom: 6

@@ -25,26 +25,13 @@ const DetailScreen = ({ route }) => {
     const onBack = () => navigation.goBack();
     const [product, setProduct] = useState({});
     const fetchProduct = async () => {
-        // try {
-        //     const response = await axios.get(`http://${IP}:3000/api/product?id=${productId}`);
-        //     setProduct(response.data);
-        //     // console.log(JSON.stringify(response.data));
-        // } catch (error) {
-        //     console.error("fetchProduct: " + error);
-        // }
-        setProduct({
-            "_id": "6425584b6805082661fc0bd1",
-            "name": "Chinese Fresh Cabbage",
-            "price": 5.66,
-            "quantity": 2,
-            "image": "https://images.unsplash.com/photo-1590759485298-244d7a5737e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-            "category": {
-                "_id": "64238cf6fc13ae1b630003fc",
-                "name": "Vegetable",
-                "image": "https://firebasestorage.googleapis.com/v0/b/fpolygroceryshop-f4260.appspot.com/o/categories%2Fvegetables.png?alt=media&token=279399a3-2ea0-48f7-87aa-1233101838af"
-            },
-            "__v": 0
-        })
+        try {
+            const response = await axios.get(`http://${IP}:3000/api/product?id=${productId}`);
+            setProduct(response.data);
+         console.log(JSON.stringify(response.data));
+        } catch (error) {
+            console.error("fetchProduct: " + error);
+        }
     }
     useEffect(() => {
         fetchProduct();

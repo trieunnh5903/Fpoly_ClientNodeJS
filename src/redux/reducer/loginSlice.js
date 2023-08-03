@@ -5,32 +5,32 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const fetchLoginThunk = createAsyncThunk('login/fetchLoginThunk', async (thunkParams) => {
     const { email, password } = thunkParams;
-    // const data = await axios.post(`http://${IP}:3000/api/user/login`, {
-    //     email,
-    //     password
-    // })
-    //     .then(function (response) {
-    //         console.log("+++++++++++++++" + JSON.stringify(response.data));
-    //         // setLoginLocal(response.data);
-    //         if (!response.data.error) {
-    //             setLoginLocal(true, response.data);
-    //         }
-    //         return response.data
-    //     })
-    //     .catch(function (error) {
-    //         console.log("fetchLoginThunk:  " + error);
-    //     })
-    const data = {
-        "error": false,
-        "user": {
-            "_id": "642e3c804b1e295808f712de",
-            "name": "aaa",
-            "email": "aaa@gmail.com",
-            "password": "$2a$10$hPEklzBwQTVPhv4N7v2j4eWuDd7J/6dd8Dcd91SaQ1wrOywq4CIl.",
-            "role": 100,
-            "__v": 0
-        }
-    }
+    const data = await axios.post(`http://${IP}:3000/api/user/login`, {
+        email,
+        password
+    })
+        .then(function (response) {
+            console.log("+++++++++++++++" + JSON.stringify(response.data));
+            // setLoginLocal(response.data);
+            if (!response.data.error) {
+                setLoginLocal(true, response.data);
+            }
+            return response.data
+        })
+        .catch(function (error) {
+            console.log("fetchLoginThunk:  " + error);
+        })
+    // const data = {
+    //     "error": false,
+    //     "user": {
+    //         "_id": "642e3c804b1e295808f712de",
+    //         "name": "aaa",
+    //         "email": "aaa@gmail.com",
+    //         "password": "$2a$10$hPEklzBwQTVPhv4N7v2j4eWuDd7J/6dd8Dcd91SaQ1wrOywq4CIl.",
+    //         "role": 100,
+    //         "__v": 0
+    //     }
+    // }
     setLoginLocal(true, data);
     return data;
 })
@@ -55,12 +55,6 @@ const loginSlice = createSlice({
     },
 
     reducers: {
-        setLoginState: (state, action) => {
-            state.isLoggedIn = true
-            state.email = action.payload.email
-            state.password = action.payload.password
-            state.name = action.payload.name
-        },
         restoreStatusLogin: (state, action) => {
             state.currentUser = { ...action.payload.loginData };
             state.isLoggedIn = true;
@@ -104,5 +98,5 @@ const loginSlice = createSlice({
     },
 })
 
-export const { setLoginState, restoreStatusLogin, logoutUser } = loginSlice.actions
+export const { restoreStatusLogin, logoutUser } = loginSlice.actions
 export default loginSlice.reducer
