@@ -38,7 +38,7 @@ const HomeStackScreen = () => {
 
 const LoginStackScreen = () => {
   return (
-    <AuthStack.Navigator initialRouteName='LoginScreen' screenOptions={{ headerShown: false }}>
+    <AuthStack.Navigator initialRouteName='RegisterScreen' screenOptions={{ headerShown: false }}>
       <AuthStack.Screen name="LoginScreen" component={LoginScreen} />
       <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} />
     </AuthStack.Navigator>
