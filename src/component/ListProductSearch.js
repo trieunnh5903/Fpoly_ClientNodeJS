@@ -19,7 +19,7 @@ const ProductItem = (props) => {
         },
         styles.itemContainer]}>
             <Image source={{uri: props.image}}
-                resizeMode='contain'
+                resizeMode='cover'
                 style={{
                     width: ITEM_SIZE - 2 * PADDING_INNER,
                     height: (ITEM_SIZE - 2 * PADDING_INNER) * (107 / 144),
@@ -62,6 +62,7 @@ export default ListProductSearch
 
 const styles = StyleSheet.create({
     name: {
+        marginTop: 5,
         fontSize: 12,
         fontWeight: '600',
         color: '#000000'
